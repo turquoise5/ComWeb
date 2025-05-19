@@ -17,9 +17,12 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-CONFIG = ConfigParser()
-CONFIG.read(BASE_DIR/ "config.ini")
-SECRET_KEY = CONFIG.get("Django", "secret")
+try:
+    CONFIG = ConfigParser()
+    CONFIG.read(BASE_DIR / "config.ini")
+    SECRET_KEY = CONFIG.get("Django", "secret")
+except Exception:
+    SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-key")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
