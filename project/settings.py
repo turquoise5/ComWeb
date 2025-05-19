@@ -11,25 +11,27 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from configparser import ConfigParser
+from django.urls import reverse
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+CONFIG = ConfigParser()
+print("Looking for config.ini at:", BASE_DIR / "config.ini")
+CONFIG.read(BASE_DIR/ "config.ini")
+SECRET_KEY = CONFIG.get("Django", "secret")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4u+$@ith-_$3%gt1euh+cv6t#rybcgj0!sdxi=tji2v5iei-l_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
