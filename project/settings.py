@@ -18,7 +18,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 CONFIG = ConfigParser()
-print("Looking for config.ini at:", BASE_DIR / "config.ini")
 CONFIG.read(BASE_DIR/ "config.ini")
 SECRET_KEY = CONFIG.get("Django", "secret")
 
@@ -29,7 +28,7 @@ SECRET_KEY = CONFIG.get("Django", "secret")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
