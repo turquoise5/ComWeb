@@ -50,5 +50,52 @@
       </li>
     </ul>
 
+    <!-- Toggle Button and List -->
+    <div class="mb-4">
+      <button class="btn btn-outline-secondary mb-2" onclick="toggleList()">Show Modes, Types, Machines</button>
+      
+      <ul id="infoList" class="list-group mb-3" style="display: none;">
+        <div class="row">
+          <!-- Modes Column -->
+          <div class="col-md-4">
+            <ul class="list-group mb-3">
+              <li class="list-group-item fw-bold">Modes</li>
+              {% for mode in modes %}
+                <li class="list-group-item">{{ mode }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+    
+          <!-- Types Column -->
+          <div class="col-md-4">
+            <ul class="list-group mb-3">
+              <li class="list-group-item fw-bold">Types</li>
+              {% for type in types %}
+                <li class="list-group-item">{{ type }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+    
+          <!-- Machines Column -->
+          <div class="col-md-4">
+            <ul class="list-group mb-3">
+              <li class="list-group-item fw-bold">Machines</li>
+              {% for machine in machines %}
+                <li class="list-group-item">{{ machine }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+       
     </body>
+    <script>
+      function toggleList() {
+        var list = document.getElementById("infoList");
+        if (list.style.display === "none") {
+          list.style.display = "block";
+        } else {
+          list.style.display = "none";
+        }
+      }
+    </script>
 </html>
