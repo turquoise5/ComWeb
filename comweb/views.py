@@ -8,7 +8,9 @@ def home(request):
         "resources": [x.NA for x in Resource.objects.all()],
         "problem_types": [x.NA for x in ProblemType.objects.all()],
         "bounds": [x.NA for x in ResourceBound.objects.all()],
-        "classes": [x.NA for x in Class.objects.all()]
+        "classes": [x.NA for x in Class.objects.all()], 
+        "methods": [x.NA for x in Method.objects.all()],
+        "Inclusions": [x.NA for x in AutoInclusion.objects.all()],
     }
     return render(request, "comweb/home.html", context)
 

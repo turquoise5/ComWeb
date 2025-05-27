@@ -61,6 +61,8 @@
           <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('problemTypesList')">Show Problem Types</button>
           <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('boundsList')">Show Bounds</button>
           <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('classesList')">Show Classes</button>
+          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('inclusionsList')">Show Inclusions</button> 
+          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('methodsList')">Show methods of proving inclusion between classes</button>
         </div>
         <div class="col-md-6">
           <div id="modesList" class="mb-2" style="display:none;">
@@ -119,6 +121,23 @@
               {% endfor %}
             </ul>
           </div>
+          <div id="inclusionsList" class="mb-2" style="display:none;">
+            <h6>Inclusions</h6>
+            <ul class="list-group">
+              {% for inclusion in inclusions %}
+                <li class="list-group-item py-1">{{ inclusion }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div id="methodsList" class="mb-2" style="display:none;">
+            <h6>Methods of Proving Inclusion</h6>
+            <ul class="list-group">
+              {% for method in methods %}
+                <li class="list-group-item py-1">{{ method }}</li>
+                <li class="list-group-item py-1">{{ method.description }}</li>
+              {% endfor %}  
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -127,7 +146,7 @@
     function toggleList(listId) {
       const lists = [
         'modesList', 'typesList', 'machinesList', 'resourcesList',
-        'problemTypesList', 'boundsList', 'classesList'
+        'problemTypesList', 'boundsList', 'classesList', 'inclusionsList', 'methodsList'
       ];
       lists.forEach(id => {
         if (id === listId) {
