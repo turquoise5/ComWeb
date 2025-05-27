@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from comweb.models import MachineMode, MachineType, Machine, Resource, ResourceBound, ProblemType, Class
+from comweb.models import MachineMode, MachineType, Machine, Resource, ResourceBound, ProblemType, Class, Method
 
 class Command(BaseCommand):
     help = 'Deletes and repopulates the database'
@@ -31,6 +31,10 @@ class Command(BaseCommand):
         MachineType.objects.bulk_create([MachineType(**data) for data in types_data])
         MachineMode.objects.bulk_create([MachineMode(**data) for data in modes_data])
 
+        # Cache lookups for modes and types
+        mode_objs = {m.NA: m for m in MachineMode.objects.all()}
+        type_objs = {t.NA: t for t in MachineType.objects.all()}
+
         machines_data = []
         # Create all combinations of modes and types to get machines
         for mode in modes_data:
@@ -40,8 +44,8 @@ class Command(BaseCommand):
                         "NA": f"{mode['NA']} {typ['NA']}",
                         "AB": f"{mode['AB']}-{typ['AB']}",
                         "SO": mode["SO"] + typ["SO"],
-                        "mode": MachineMode.objects.get(NA=mode['NA']),
-                        "machine_type": MachineType.objects.get(NA=typ['NA'])
+                        "mode": mode_objs[mode['NA']],
+                        "machine_type": type_objs[typ['NA']]
                     }
                 )
 
@@ -88,203 +92,209 @@ class Command(BaseCommand):
         ProblemType.objects.bulk_create([ProblemType(**data) for data in problem_type_data])
         ResourceBound.objects.bulk_create([ResourceBound(**data) for data in bounds_data])
 
+        # Cache lookups to avoid repeated DB hits
+        problem_types = {pt.NA: pt for pt in ProblemType.objects.all()}
+        machines = {m.NA: m for m in Machine.objects.all()}
+        resources = {r.NA: r for r in Resource.objects.all()}
+        bounds = {b.NA: b for b in ResourceBound.objects.all()}
+        bounds_ab = {b.AB: b for b in ResourceBound.objects.all()}
+
         class_data = [
             {
                 'NA': 'Deterministic Regular',
                 'AB': 'D-REGULAR',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='deterministic finite automata'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(NA='linear')
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['deterministic finite automata'],
+                'resource1': resources['time'],
+                'bound1': bounds['linear']
             },
             {
                 'NA': 'Non-deterministic Regular',
                 'AB': 'N-REGULAR',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='non-deterministic finite automata'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(NA='linear')
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['non-deterministic finite automata'],
+                'resource1': resources['time'],
+                'bound1': bounds['linear']
             },
             {
                 'NA': 'Deterministic Context-Free',
                 'AB': 'D-CONTEXT-FREE',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='deterministic pushdown automata'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='lin'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['deterministic pushdown automata'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['lin'],
             },
             {
                 'NA': 'Non-deterministic Context-Free',
                 'AB': 'N-CONTEXT-FREE',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='non-deterministic pushdown automata'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='lin'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['non-deterministic pushdown automata'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['lin'],
             },
             {
                 'NA': 'Decidable',
                 'AB': 'DECIDABLE',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='rec'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['deterministic Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['rec'],
             },
             {
                 'NA': 'Recognizable',
                 'AB': 'RECOGNIZABLE',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='non-deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='inf'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['non-deterministic Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['inf'],
             },
-            
             {
                 'NA': 'Deterministic Polynomial Time',
                 'AB': 'P',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='poly'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['deterministic Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['poly'],
             },
             {
                 'NA': 'Nondeterministic Polynomial Time',
                 'AB': 'NP',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='non-deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='poly'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['non-deterministic Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['poly'],
             },
             {
                 'NA': 'First Level Polynomial Hierarchy',
                 'AB': 'Sigma_1^P',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='alternating Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='poly'),
-                'resource2': Resource.objects.get(NA='# of alternations'),
-                'bound2': ResourceBound.objects.get(AB='1')
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['alternating Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['poly'],
+                'resource2': resources['# of alternations'],
+                'bound2': bounds_ab['1']
             },
             {
                 'NA': 'Second Level Polynomial Hierarchy',
                 'AB': 'Sigma_2^P',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='alternating Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='poly'),
-                'resource2': Resource.objects.get(NA='# of alternations'),
-                'bound2': ResourceBound.objects.get(AB='2')
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['alternating Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['poly'],
+                'resource2': resources['# of alternations'],
+                'bound2': bounds_ab['2']
             },
             {
                 'NA': 'Alternating Polynomial Time',
                 'AB': 'AP',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='alternating Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='poly'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['alternating Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['poly'],
             },
             {
                 'NA': 'Deterministic Exponential Time',
                 'AB': 'EXP',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='exp'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['deterministic Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['exp'],
             },
             {
                 'NA': 'Nondeterministic Exponential Time',
                 'AB': 'NEXP',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='non-deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='exp'),
-            },  
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['non-deterministic Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['exp'],
+            },
             {
                 'NA': 'Deterministic Logarithmic Space',
                 'AB': 'L',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='space'),
-                'bound1': ResourceBound.objects.get(AB='log'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['deterministic Turing machine'],
+                'resource1': resources['space'],
+                'bound1': bounds_ab['log'],
             },
             {
                 'NA': 'Nondeterministic Logarithmic Space',
                 'AB': 'NL',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='non-deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='space'),
-                'bound1': ResourceBound.objects.get(AB='log'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['non-deterministic Turing machine'],
+                'resource1': resources['space'],
+                'bound1': bounds_ab['log'],
             },
             {
                 'NA': 'Alternating Log Space',
                 'AB': 'AL',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='alternating Turing machine'),
-                'resource1': Resource.objects.get(NA='space'),
-                'bound1': ResourceBound.objects.get(AB='log'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['alternating Turing machine'],
+                'resource1': resources['space'],
+                'bound1': bounds_ab['log'],
             },
             {
                 'NA': 'Polynomial Space',
                 'AB': 'PSPACE',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='space'),
-                'bound1': ResourceBound.objects.get(AB='poly'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['deterministic Turing machine'],
+                'resource1': resources['space'],
+                'bound1': bounds_ab['poly'],
             },
             {
                 'NA': 'Nondeterministic Polynomial Space',
                 'AB': 'NPSPACE',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='non-deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='space'),
-                'bound1': ResourceBound.objects.get(AB='poly'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['non-deterministic Turing machine'],
+                'resource1': resources['space'],
+                'bound1': bounds_ab['poly'],
             },
             {
                 'NA': 'Alternating Polynomial Space',
                 'AB': 'APSPACE',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='alternating Turing machine'),
-                'resource1': Resource.objects.get(NA='space'),
-                'bound1': ResourceBound.objects.get(AB='poly'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['alternating Turing machine'],
+                'resource1': resources['space'],
+                'bound1': bounds_ab['poly'],
             },
             {
                 'NA': 'Deterministic Exponential Space',
                 'AB': 'EXPSPACE',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='space'),
-                'bound1': ResourceBound.objects.get(AB='exp'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['deterministic Turing machine'],
+                'resource1': resources['space'],
+                'bound1': bounds_ab['exp'],
             },
             {
                 'NA': 'Nondeterministic Exponential Space',
                 'AB': 'NEXPSPACE',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='non-deterministic Turing machine'),
-                'resource1': Resource.objects.get(NA='space'),
-                'bound1': ResourceBound.objects.get(AB='exp'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['non-deterministic Turing machine'],
+                'resource1': resources['space'],
+                'bound1': bounds_ab['exp'],
             },
             {
                 'NA': 'Bounded-error Probabilistic Polynomial Time',
                 'AB': 'BPP',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='probabilistic Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='poly'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['probabilistic Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['poly'],
             },
             {
                 'NA': 'Randomized Polynomial Time',
                 'AB': 'RP',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='probabilistic Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='poly'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['probabilistic Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['poly'],
             },
             {
                 'NA': 'Quantum Polynomial Time',
                 'AB': 'BQP',
-                'problem_type': ProblemType.objects.get(NA='decision problem'),
-                'machine': Machine.objects.get(NA='quantum Turing machine'),
-                'resource1': Resource.objects.get(NA='time'),
-                'bound1': ResourceBound.objects.get(AB='poly'),
+                'problem_type': problem_types['decision problem'],
+                'machine': machines['quantum Turing machine'],
+                'resource1': resources['time'],
+                'bound1': bounds_ab['poly'],
             },
         ]
 
@@ -292,4 +302,34 @@ class Command(BaseCommand):
         Class.objects.bulk_create([Class(**data) for data in class_data])
 
 
+        method_data = [
+            {
+                "NA": "machine mode generalization",
+                "AB": "MMG",
+                "SO": 0,
+                "DE": "Proving inclusion by generalizing the machine mode (e.g., deterministic to non-deterministic: DTM < NTM)."
+            },
+            {
+                "NA": "resource bound generalization",
+                "AB": "RBG",
+                "SO": 1,
+                "DE": "Proving inclusion by relaxing the resource bound (e.g., polynomial to exponential time)."
+            },
+            {
+                "NA": "problem type generalization",
+                "AB": "PTG",
+                "SO": 2,
+                "DE": "Proving inclusion by generalizing the problem type (e.g., decision to search)."
+            },
+            {
+                "NA": "machine generalization",
+                "AB": "MG",
+                "SO": 3,
+                "DE": "Proving inclusion by generalizing the machine type (e.g., finite automaton to Turing machine)."
+            },
+        ]
+        
+        Method.objects.all().delete()
+        Method.objects.bulk_create([Method(**data) for data in method_data])
+        
         self.stdout.write(self.style.SUCCESS('Database has been reset and populated.'))
