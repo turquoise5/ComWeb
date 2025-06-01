@@ -20,6 +20,7 @@ class Command(BaseCommand):
             {"NA": "Turing machine", "AB": "TM", "SO": 2},
             {"NA": "finite automata", "AB": "FA", "SO": 0},
             {"NA": "pushdown automata", "AB": "PA", "SO": 1}
+            {"NA": "linear bounded automaton", "AB": "LBA", "SO": 3}
         ]
 
         # Clear existing data
