@@ -305,26 +305,26 @@ class Command(BaseCommand):
 
         method_data = [
             {
-                "NA": "machine mode generalization",
+                "NA": "machine-mode generalization",
                 "AB": "MMG",
                 "SO": 0,
                 "DE": "Proving inclusion by generalizing the machine mode (e.g., deterministic to non-deterministic: DTM < NTM)."
             },
             {
-                "NA": "resource bound generalization",
+                "NA": "resource-bound generalization",
                 "AB": "RBG",
                 "SO": 1,
                 "DE": "Proving inclusion by relaxing the resource bound (e.g., polynomial to exponential time)."
             },
             {
-                "NA": "problem type generalization",
+                "NA": "problem-type generalization",
                 "AB": "PTG",
                 "SO": 2,
                 "DE": "Proving inclusion by generalizing the problem type (e.g., decision to search)."
             },
             {
-                "NA": "machine generalization",
-                "AB": "MG",
+                "NA": "machine-type generalization",
+                "AB": "MTG",
                 "SO": 3,
                 "DE": "Proving inclusion by generalizing the machine type (e.g., finite automaton to Turing machine)."
             },
