@@ -80,10 +80,10 @@ class Command(BaseCommand):
         ]
 
         problem_type_data = [
-            {'NA': 'decision problem', 'SO': 0},
-            {'NA': 'function problem', 'SO': 1},
-            {'NA': 'search problem', 'SO': 2},
-            {'NA': 'counting problem', 'SO': 3}
+            {'NA': 'decision problem', 'SO': 0, "order": 0},
+            {'NA': 'function problem', 'SO': 1, "order": 1},
+            {'NA': 'search problem', 'SO': 2, "order": 3},
+            {'NA': 'counting problem', 'SO': 3, "order": 2},
         ]
         
         bounds_data = [
@@ -103,10 +103,6 @@ class Command(BaseCommand):
             {'NA': 'one', 'AB': '1', 'SO': '1', 'order': '1'},
             {'NA': 'zero', 'AB': '0', 'SO': '0', 'order': '0'} 
         ]
-
-        # Resource.objects.all().delete()
-        # ProblemType.objects.all().delete()
-        # ResourceBound.objects.all().delete()
 
         Resource.objects.bulk_create([Resource(**data) for data in resource_data])
         ProblemType.objects.bulk_create([ProblemType(**data) for data in problem_type_data])
@@ -318,7 +314,6 @@ class Command(BaseCommand):
             },
         ]
 
-        # Class.objects.all().delete()
         Class.objects.bulk_create([Class(**data) for data in class_data])
 
 
@@ -349,7 +344,6 @@ class Command(BaseCommand):
             },
         ]
         
-        # Method.objects.all().delete()
         Method.objects.bulk_create([Method(**data) for data in method_data])
         
         manualMTG_data = [
@@ -376,7 +370,6 @@ class Command(BaseCommand):
 
             ]
 
-        # ManualMTG.objects.all().delete()
         ManualMTG.objects.bulk_create([ManualMTG(**data) for data in manualMTG_data])
 
         with connection.cursor() as cursor:
@@ -398,7 +391,7 @@ class Command(BaseCommand):
         for lower_id, upper_id in rows:
             lower = MachineType.objects.get(id=lower_id)
             upper = MachineType.objects.get(id=upper_id)
-            MTG.objects.update_or_create(
+            MTG.objects.get_or_create(
                 lower=lower,
                 upper=upper,
                 method="transitivity",
@@ -434,7 +427,6 @@ class Command(BaseCommand):
             }        
         ]
 
-        # ManualMMG.objects.all().delete()
         ManualMMG.objects.bulk_create([ManualMMG(**data) for data in manulaMMG_data])
 
         with connection.cursor() as cursor:
@@ -456,7 +448,7 @@ class Command(BaseCommand):
         for lower_id, upper_id in rows:
             lower = MachineMode.objects.get(id=lower_id)
             upper = MachineMode.objects.get(id=upper_id)
-            MMG.objects.update_or_create(
+            MMG.objects.get_or_create(
                 lower=lower,
                 upper=upper,
                 method="transitivity",
@@ -464,4 +456,119 @@ class Command(BaseCommand):
                 row2=None
             )
         
-        self.stdout.write(self.style.SUCCESS('Database has been reset and populated.'))
+
+        # Use MTG, MMG in populating AUTO-INCLUSION by “machine-type/mode generalization”
+        # For each pair of classes, if all fields match except machine.mode or machine.machine_type,
+        # and there is a generalization (in MMG or MTG), add an AutoInclusion
+
+        all_classes = list(Class.objects.select_related(
+            'problem_type', 'machine', 'machine__mode', 'machine__machine_type',
+            'resource1', 'resource2', 'bound1', 'bound2'
+        ))
+
+        # Build lookup tables for MMG and MTG
+        mmg_pairs = set((mmg.lower_id, mmg.upper_id) for mmg in MMG.objects.all())
+        mtg_pairs = set((mtg.lower_id, mtg.upper_id) for mtg in MTG.objects.all())
+
+        for c1 in all_classes:
+            for c2 in all_classes:
+                if c1 == c2:
+                    continue
+                # Check all fields except machine.mode, machine.machine_type, and bounds
+                same_except_mode_type_bound = (
+                    c1.problem_type_id == c2.problem_type_id and
+                    c1.resource1_id == c2.resource1_id and
+                    c1.resource2_id == c2.resource2_id
+                )
+
+                # Check for mode generalization
+                if (
+                    same_except_mode_type_bound and
+                    c1.machine.machine_type_id == c2.machine.machine_type_id and
+                    c1.bound1_id == c2.bound1_id and
+                    c1.bound2_id == c2.bound2_id and
+                    (c1.machine.mode_id, c2.machine.mode_id) in mmg_pairs
+                ):
+                    AutoInclusion.objects.get_or_create(
+                        lower=c1,
+                        upper=c2,
+                        method=Method.objects.get(AB="MMG")
+                    )
+                # Check for type generalization
+                elif (
+                    same_except_mode_type_bound and
+                    c1.machine.mode_id == c2.machine.mode_id and
+                    c1.bound1_id == c2.bound1_id and
+                    c1.bound2_id == c2.bound2_id and
+                    (c1.machine.machine_type_id, c2.machine.machine_type_id) in mtg_pairs
+                ):
+                    AutoInclusion.objects.get_or_create(
+                        lower=c1,
+                        upper=c2,
+                        method=Method.objects.get(AB="MTG")
+                    )
+                # Check for resource bound generalization (bound1 and bound2)
+                elif (
+                    same_except_mode_type_bound and
+                    c1.machine_id == c2.machine_id
+                ):
+                    # Bound1 generalization
+                    if (
+                        c1.bound1_id != c2.bound1_id and
+                        c1.bound2_id == c2.bound2_id and
+                        c1.bound1 is not None and c2.bound1 is not None and
+                        hasattr(c1.bound1, 'order') and hasattr(c2.bound1, 'order')
+                    ):
+                        # Lower bound is more restrictive (smaller order), upper bound is more general (larger order)
+                        if c1.bound1.order <= c2.bound1.order:
+                            AutoInclusion.objects.get_or_create(
+                                lower=c1,
+                                upper=c2,
+                                method=Method.objects.get(AB="RBG")
+                            )
+                    # Bound2 generalization (if both have bound2)
+                    if (
+                        c1.bound2_id != c2.bound2_id and
+                        c1.bound1_id == c2.bound1_id and
+                        c1.bound2 is not None and c2.bound2 is not None and
+                        hasattr(c1.bound2, 'order') and hasattr(c2.bound2, 'order')
+                    ):
+                        if c1.bound2.order <= c2.bound2.order:
+                            AutoInclusion.objects.get_or_create(
+                                lower=c1,
+                                upper=c2,
+                                method=Method.objects.get(AB="RBG")
+                            )
+                # NEW: Check for both mode/type and bound generalization together
+                elif (
+                    same_except_mode_type_bound and
+                    c1.bound1_id != c2.bound1_id and
+                    c1.bound2_id == c2.bound2_id and
+                    c1.bound1 is not None and c2.bound1 is not None and
+                    hasattr(c1.bound1, 'order') and hasattr(c2.bound1, 'order')
+                ):
+                    # Mode generalization + bound generalization
+                    if (
+                        c1.machine.machine_type_id == c2.machine.machine_type_id and
+                        (c1.machine.mode_id, c2.machine.mode_id) in mmg_pairs and
+                        c1.bound1.order <= c2.bound1.order
+                    ):
+                        AutoInclusion.objects.get_or_create(
+                            lower=c1,
+                            upper=c2,
+                            method=Method.objects.get(AB="MMG")
+                        )
+                    # Type generalization + bound generalization
+                    if (
+                        c1.machine.mode_id == c2.machine.mode_id and
+                        (c1.machine.machine_type_id, c2.machine.machine_type_id) in mtg_pairs and
+                        c1.bound1.order <= c2.bound1.order
+                    ):
+                        AutoInclusion.objects.get_or_create(
+                            lower=c1,
+                            upper=c2,
+                            method=Method.objects.get(AB="MTG")
+                        )
+
+                            
+        self.stdout.write(self.style.SUCCESS('Database populated successfully.'))
