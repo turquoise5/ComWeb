@@ -63,6 +63,10 @@
           <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('classesList')">Show Classes</button>
           <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('inclusionsList')">Show Inclusions</button> 
           <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('methodsList')">Show methods of proving inclusion between classes</button>
+          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('manualMTGList')">Manual MTG</button>
+          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('MTGList')">MTG</button>
+          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('manualMMGList')">Manual MMG</button>
+          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('MMGList')">MMG</button>
         </div>
         <div class="col-md-6">
           <div id="modesList" class="mb-2" style="display:none;">
@@ -138,6 +142,84 @@
               {% endfor %}  
             </ul>
           </div>
+          <div id="manualMTGList" class="mb-2" style="display:none;">
+            <h6>Manual MTG</h6>
+            <ul class="list-group">
+              {% if manual_mtgs %}
+                {% for manual_mtg in manual_mtgs %}
+                  <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span>
+                        <strong>{{ manual_mtg.lower.NA }}</strong>
+                        <span class="mx-2 text-primary">&#8594;</span>
+                        <strong>{{ manual_mtg.upper.NA }}</strong>
+                      </span>
+                    </div>
+                    <div class="text-muted small mt-1">
+                      <em>Justification:</em> {{ manual_mtg.justification }}
+                    </div>
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li class="list-group-item text-muted">No manual MTG entries found.</li>
+              {% endif %}
+            </ul>
+          </div>
+          <div id="MTGList" class="mb-2" style="display:none;">
+            <h6>MTG</h6>
+            <ul class="list-group">
+              {% if mtgs %}
+                {% for mtg in mtgs %}
+                  <li class="list-group-item">
+                    <strong>{{ mtg.lower.NA }}</strong>
+                    <span class="mx-2 text-primary">&#8594;</span>
+                    <strong>{{ mtg.upper.NA }}</strong>
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li class="list-group-item text-muted">No MTG entries found.</li>
+              {% endif %}
+            </ul>
+          </div>
+          <div id="manualMMGList" class="mb-2" style="display:none;">
+            <h6>Manual MMG</h6>
+            <ul class="list-group">
+              {% if manual_mmgs %}
+                {% for manual_mmg in manual_mmgs %}
+                  <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span>
+                        <strong>{{ manual_mmg.lower.NA }}</strong>
+                        <span class="mx-2 text-primary">&#8594;</span>
+                        <strong>{{ manual_mmg.upper.NA }}</strong>
+                      </span>
+                    </div>
+                    <div class="text-muted small mt-1">
+                      <em>Justification:</em> {{ manual_mmg.justification }}
+                    </div>
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li class="list-group-item text-muted">No manual MMG entries found.</li>
+              {% endif %}
+            </ul>
+          </div>
+          <div id="MMGList" class="mb-2" style="display:none;">
+            <h6>MMG</h6>
+            <ul class="list-group">
+              {% if mmgs %}
+                {% for mmg in mmgs %}
+                  <li class="list-group-item">
+                    <strong>{{ mmg.lower.NA }}</strong>
+                    <span class="mx-2 text-primary">&#8594;</span>
+                    <strong>{{ mmg.upper.NA }}</strong>
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li class="list-group-item text-muted">No MMG entries found.</li>
+              {% endif %}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -146,7 +228,8 @@
     function toggleList(listId) {
       const lists = [
         'modesList', 'typesList', 'machinesList', 'resourcesList',
-        'problemTypesList', 'boundsList', 'classesList', 'inclusionsList', 'methodsList'
+        'problemTypesList', 'boundsList', 'classesList', 'inclusionsList', 'methodsList', 
+        'manualMTGList', 'MTGList', 'manualMMGList', 'MMGList'
       ];
       lists.forEach(id => {
         if (id === listId) {
