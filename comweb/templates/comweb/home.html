@@ -129,7 +129,14 @@
             <h6>Inclusions</h6>
             <ul class="list-group">
               {% for inclusion in inclusions %}
-                <li class="list-group-item py-1">{{ inclusion }}</li>
+                <li class="list-group-item">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span>
+                        <strong>{{ inclusion.lower.AB }}</strong>
+                        <span class="mx-2 text-primary"> ⊆ </span>
+                        <strong>{{ inclusion.upper.AB }}</strong>
+                    </span>
+                  </div>              
               {% endfor %}
             </ul>
           </div>
