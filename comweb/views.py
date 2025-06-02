@@ -10,7 +10,11 @@ def home(request):
         "bounds": [x.NA for x in ResourceBound.objects.all()],
         "classes": [x.NA for x in Class.objects.all()], 
         "methods": [x.NA for x in Method.objects.all()],
-        "Inclusions": [x.NA for x in AutoInclusion.objects.all()],
+        "inclusions": [x.NA for x in AutoInclusion.objects.all()],
+        "manual_mtgs": [x for x in ManualMTG.objects.all()],
+        "mtgs": [x for x in MTG.objects.all()],
+        "manual_mmgs": [x for x in ManualMMG.objects.all()],
+        "mmgs": [x for x in MMG.objects.all()],
     }
     return render(request, "comweb/home.html", context)
 
