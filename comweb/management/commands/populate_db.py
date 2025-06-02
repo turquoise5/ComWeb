@@ -1,10 +1,29 @@
 from django.core.management.base import BaseCommand
-from comweb.models import MachineMode, MachineType, Machine, Resource, ResourceBound, ProblemType, Class, Method
+from django.db import connection
+from comweb.models import *
 
 class Command(BaseCommand):
     help = 'Deletes and repopulates the database'
 
     def handle(self, *args, **options):
+
+        # delete everything
+        MachineMode.objects.all().delete()
+        MachineType.objects.all().delete()
+        Machine.objects.all().delete()
+        Resource.objects.all().delete()
+        ProblemType.objects.all().delete()
+        ResourceBound.objects.all().delete()
+        Class.objects.all().delete()
+        Method.objects.all().delete()
+        ManualMTG.objects.all().delete()
+        MTG.objects.all().delete()
+        ManualMMG.objects.all().delete()
+        MMG.objects.all().delete()
+        AutoInclusion.objects.all().delete()
+        
+        # Define the data to be inserted
+
         modes_data = [
             {"NA": "deterministic", "AB": "D", "SO": 0},
             {"NA": "non-deterministic", "AB": "N", "SO": 1},
@@ -19,14 +38,14 @@ class Command(BaseCommand):
         types_data = [
             {"NA": "Turing machine", "AB": "TM", "SO": 2},
             {"NA": "finite automata", "AB": "FA", "SO": 0},
-            {"NA": "pushdown automata", "AB": "PA", "SO": 1}
-            {"NA": "linear bounded automaton", "AB": "LBA", "SO": 3}
+            {"NA": "pushdown automata", "AB": "PA", "SO": 1},
+            {"NA": "linear bounded automaton", "AB": "LBA", "SO": 1}
         ]
 
-        # Clear existing data
-        MachineMode.objects.all().delete()
-        MachineType.objects.all().delete()
-        Machine.objects.all().delete()
+        # # Clear existing data
+        # MachineMode.objects.all().delete()
+        # MachineType.objects.all().delete()
+        # Machine.objects.all().delete()
 
         # Insert new data
         MachineType.objects.bulk_create([MachineType(**data) for data in types_data])
@@ -85,9 +104,9 @@ class Command(BaseCommand):
             {'NA': 'zero', 'AB': '0', 'SO': '0', 'order': '0'} 
         ]
 
-        Resource.objects.all().delete()
-        ProblemType.objects.all().delete()
-        ResourceBound.objects.all().delete()
+        # Resource.objects.all().delete()
+        # ProblemType.objects.all().delete()
+        # ResourceBound.objects.all().delete()
 
         Resource.objects.bulk_create([Resource(**data) for data in resource_data])
         ProblemType.objects.bulk_create([ProblemType(**data) for data in problem_type_data])
@@ -299,7 +318,7 @@ class Command(BaseCommand):
             },
         ]
 
-        Class.objects.all().delete()
+        # Class.objects.all().delete()
         Class.objects.bulk_create([Class(**data) for data in class_data])
 
 
@@ -330,7 +349,119 @@ class Command(BaseCommand):
             },
         ]
         
-        Method.objects.all().delete()
+        # Method.objects.all().delete()
         Method.objects.bulk_create([Method(**data) for data in method_data])
+        
+        manualMTG_data = [
+            {
+                "lower": MachineType.objects.get(NA="finite automata"),
+                "upper": MachineType.objects.get(NA="pushdown automata"),
+                "justification": "pushdown automata generalize finite automata by adding a stack (memory), but can simulate finite automata by simply not using the stack.",
+            },       
+            {
+                "lower": MachineType.objects.get(NA="pushdown automata"),
+                "upper": MachineType.objects.get(NA="Turing machine"),
+                "justification": "Turing machines generalize pushdown automata by providing an infinite tape instead of a stack, allowing them to simulate any pushdown automaton.",
+            },
+            {
+                "lower": MachineType.objects.get(NA="finite automata"),
+                "upper": MachineType.objects.get(NA="linear bounded automaton"),
+                "justification": "Linear bounded automata generalize finite automata by providing a tape of linear size, so any computation by a finite automaton can be simulated by a linear bounded automaton.",
+            },
+            {
+                "lower": MachineType.objects.get(NA="linear bounded automaton"),
+                "upper": MachineType.objects.get(NA="Turing machine"),
+                "justification": "Turing machines generalize linear bounded automata by allowing an unbounded tape, so any computation by a linear bounded automaton can be simulated by a Turing machine.",
+            }
+
+            ]
+
+        # ManualMTG.objects.all().delete()
+        ManualMTG.objects.bulk_create([ManualMTG(**data) for data in manualMTG_data])
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                WITH RECURSIVE mtg_closure AS (
+                    SELECT lower_id, upper_id
+                    FROM comweb_manualmtg
+                    UNION
+                    SELECT c.lower_id, m.upper_id
+                    FROM mtg_closure c
+                    JOIN comweb_manualmtg m ON c.upper_id = m.lower_id
+                )
+                SELECT DISTINCT lower_id, upper_id 
+                FROM mtg_closure 
+                WHERE lower_id != upper_id;
+            """)
+            rows = cursor.fetchall()
+        
+        for lower_id, upper_id in rows:
+            lower = MachineType.objects.get(id=lower_id)
+            upper = MachineType.objects.get(id=upper_id)
+            MTG.objects.update_or_create(
+                lower=lower,
+                upper=upper,
+                method="transitivity",
+                row1=None, 
+                row2=None
+            )
+        
+        manulaMMG_data = [
+            {
+                "lower": MachineMode.objects.get(NA="deterministic"),
+                "upper": MachineMode.objects.get(NA="non-deterministic"),
+                "justification": "Deterministic machines can be seen as a special case of non-deterministic machines where the number of choices at each step is exactly one.",
+            },
+            {
+                "lower": MachineMode.objects.get(NA="non-deterministic"),
+                "upper": MachineMode.objects.get(NA="alternating"),
+                "justification": "Non-deterministic machines can be seen as a special case of alternating machines where the number of alternations is zero.",
+            }, 
+            {
+                "lower": MachineMode.objects.get(NA="non-deterministic"),
+                "upper": MachineMode.objects.get(NA="probabilistic"),
+                "justification": "Non-deterministic machines can be seen as a special case of probabilistic machines where the probability of each transition is either 0 or 1.",
+            },
+            {
+                "lower": MachineMode.objects.get(NA="non-deterministic"),
+                "upper": MachineMode.objects.get(NA="quantum"),
+                "justification": "Non-deterministic machines can be seen as a special case of quantum machines.",
+            },
+            {
+                "lower": MachineMode.objects.get(NA="probabilistic"),
+                "upper": MachineMode.objects.get(NA="quantum"),
+                "justification": "Probabilistic machines can be seen as a special case of quantum machines where the quantum states are classical probabilities.",
+            }        
+        ]
+
+        # ManualMMG.objects.all().delete()
+        ManualMMG.objects.bulk_create([ManualMMG(**data) for data in manulaMMG_data])
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                WITH RECURSIVE mmg_closure AS (
+                    SELECT lower_id, upper_id
+                    FROM comweb_manualmmg
+                    UNION
+                    SELECT c.lower_id, m.upper_id
+                    FROM mmg_closure c
+                    JOIN comweb_manualmmg m ON c.upper_id = m.lower_id
+                )
+                SELECT DISTINCT lower_id, upper_id 
+                FROM mmg_closure 
+                WHERE lower_id != upper_id;
+            """)
+            rows = cursor.fetchall()
+
+        for lower_id, upper_id in rows:
+            lower = MachineMode.objects.get(id=lower_id)
+            upper = MachineMode.objects.get(id=upper_id)
+            MMG.objects.update_or_create(
+                lower=lower,
+                upper=upper,
+                method="transitivity",
+                row1=None, 
+                row2=None
+            )
         
         self.stdout.write(self.style.SUCCESS('Database has been reset and populated.'))
