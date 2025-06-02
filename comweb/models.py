@@ -34,6 +34,7 @@ class Resource(models.Model):
 class ProblemType(models.Model):
     NA = models.CharField(max_length=100) # name 
     SO = models.IntegerField() # sort order
+    order = models.IntegerField() # order of the problem type compared to other problem types
     class Meta:
         ordering = ['SO']
 
