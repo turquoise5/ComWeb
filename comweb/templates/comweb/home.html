@@ -187,7 +187,7 @@ function toggleList(listId) {
       if (div.style.display === 'none' || div.style.display === '') {
         // Only fetch if not already loaded
         if (!div.dataset.loaded) {
-          fetch(`/get_list/${id}`)
+          fetch(`/get_list/?type=${id}`)
             .then(res => res.json())
             .then(json => {
               const ul = document.getElementById(id + 'Content');

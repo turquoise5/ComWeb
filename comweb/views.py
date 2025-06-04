@@ -3,13 +3,13 @@ from django.http import JsonResponse
 from comweb.models import *
 
 def home(request): 
-    print("Home view accessed")
     return render(request, "comweb/home.html")
 
-def get_list(request, list_type):
+def get_list(request):  
+    list_type = request.GET.get('type') 
     data = []
     if list_type == 'modesList':
-        data = [x.NA for x in Mode.objects.all()]
+        data = [x.NA for x in MachineMode.objects.all()]
     elif list_type == 'typesList':
         data = [x.NA for x in MachineType.objects.all()]
     elif list_type == 'machinesList':
@@ -69,5 +69,6 @@ def get_list(request, list_type):
             }
             for x in MMG.objects.all()
         ]
+    
     return JsonResponse({'data': data})
 
