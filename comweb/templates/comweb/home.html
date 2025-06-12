@@ -141,7 +141,10 @@
   <script>
 const listConfigs = {
   modesList: data => data.map(mode => `<li class="list-group-item py-1">${mode}</li>`).join(''),
-  typesList: data => data.map(type => `<li class="list-group-item py-1">${type}</li>`).join(''),
+  typesList: data => data.map(type => 
+  `<li class="list-group-item py-1">${type.name}</li>
+  <li class="list-group-item py-1">${type.AB}</li>`
+).join(''),
   machinesList: data => data.map(machine => `<li class="list-group-item py-1">${machine}</li>`).join(''),
   resourcesList: data => data.map(resource => `<li class="list-group-item py-1">${resource}</li>`).join(''),
   problemTypesList: data => data.map(pt => `<li class="list-group-item py-1">${pt}</li>`).join(''),

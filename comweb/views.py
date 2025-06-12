@@ -9,11 +9,13 @@ def get_list(request):
     list_type = request.GET.get('type') 
     data = []
     if list_type == 'modesList':
-        data = [x.NA for x in MachineMode.objects.all()]
+        data = [x.NA for x in MachineMode.objects.all()] 
     elif list_type == 'typesList':
-        data = [x.NA for x in MachineType.objects.all()]
-    elif list_type == 'machinesList':
-        data = [x.NA for x in Machine.objects.all()]
+        data = [{
+            "name": x.NA,
+            "AB": x.AB
+        } for x in MachineType.objects.all()  
+    ]   
     elif list_type == 'resourcesList':
         data = [x.NA for x in Resource.objects.all()]
     elif list_type == 'problemTypesList':
@@ -21,7 +23,11 @@ def get_list(request):
     elif list_type == 'boundsList':
         data = [x.NA for x in ResourceBound.objects.all()]
     elif list_type == 'classesList':
-        data = [x.NA for x in Class.objects.all()]
+        data = [{
+            "name": x.NA,
+            "AB": x.AB
+        } for x in Class.objects.all() 
+    ]        
     elif list_type == 'inclusionsList':
         data = [
             {

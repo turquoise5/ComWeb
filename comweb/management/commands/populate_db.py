@@ -410,21 +410,6 @@ class Command(BaseCommand):
                 "upper": MachineMode.objects.get(NA="alternating"),
                 "justification": "Non-deterministic machines can be seen as a special case of alternating machines where the number of alternations is zero.",
             }, 
-            {
-                "lower": MachineMode.objects.get(NA="non-deterministic"),
-                "upper": MachineMode.objects.get(NA="probabilistic"),
-                "justification": "Non-deterministic machines can be seen as a special case of probabilistic machines where the probability of each transition is either 0 or 1.",
-            },
-            {
-                "lower": MachineMode.objects.get(NA="non-deterministic"),
-                "upper": MachineMode.objects.get(NA="quantum"),
-                "justification": "Non-deterministic machines can be seen as a special case of quantum machines.",
-            },
-            {
-                "lower": MachineMode.objects.get(NA="probabilistic"),
-                "upper": MachineMode.objects.get(NA="quantum"),
-                "justification": "Probabilistic machines can be seen as a special case of quantum machines where the quantum states are classical probabilities.",
-            }        
         ]
 
         ManualMMG.objects.bulk_create([ManualMMG(**data) for data in manulaMMG_data])
