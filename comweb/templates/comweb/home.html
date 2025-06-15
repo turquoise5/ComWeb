@@ -56,9 +56,7 @@
         <div class="col-md-6">
           <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('modesList')">Show Machine Modes</button>
           <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('typesList')">Show Machine Types</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('machinesList')">Show Machines</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('resourcesList')">Show Resources</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('problemTypesList')">Show Problem Types</button>
+          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('machinesList')">Show Machines</button>          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('problemTypesList')">Show Problem Types</button>
           <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('boundsList')">Show Resource Bounds</button>
           <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('classesList')">Show Classes</button>
           <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('inclusionsList')">Show Inclusions</button> 
@@ -82,11 +80,6 @@
           <div id="machinesList" class="mb-2" style="display:none;">
             <h6>Machines</h6>
             <ul class="list-group" id="machinesListContent">
-            </ul>
-          </div>
-          <div id="resourcesList" class="mb-2" style="display:none;">
-            <h6>Resources</h6>
-            <ul class="list-group" id="resourcesListContent">
             </ul>
           </div>
           <div id="problemTypesList" class="mb-2" style="display:none;">
@@ -141,12 +134,26 @@
   <script>
 const listConfigs = {
   modesList: data => data.map(mode => `<li class="list-group-item py-1">${mode}</li>`).join(''),
-  typesList: data => data.map(type => `<li class="list-group-item py-1">${type}</li>`).join(''),
-  machinesList: data => data.map(machine => `<li class="list-group-item py-1">${machine}</li>`).join(''),
-  resourcesList: data => data.map(resource => `<li class="list-group-item py-1">${resource}</li>`).join(''),
+  typesList: data => data.map(type => 
+    `<li class="list-group-item py-1 d-flex justify-content-between align-items-center">
+      <span>${type.name}</span>
+      <span class="badge bg-secondary">${type.AB}</span>
+    </li>`
+  ).join(''),
+  machinesList: data => data.map(machine => 
+    `<li class="list-group-item py-1 d-flex justify-content-between align-items-center">
+      <span>${machine.name}</span>
+      <span class="badge bg-secondary">${machine.AB}</span>
+    </li>`
+  ).join(''),
   problemTypesList: data => data.map(pt => `<li class="list-group-item py-1">${pt}</li>`).join(''),
   boundsList: data => data.map(bound => `<li class="list-group-item py-1">${bound}</li>`).join(''),
-  classesList: data => data.map(c => `<li class="list-group-item py-1">${c}</li>`).join(''),
+  classesList: data => data.map(c => 
+    `<li class="list-group-item py-1 d-flex justify-content-between align-items-center">
+      <span>${c.name}</span>
+      <span class="badge bg-secondary">${c.AB}</span>
+    </li>`
+  ).join(''),
   inclusionsList: data => data.map(inc =>
     `<li class="list-group-item"><div class="d-flex justify-content-between align-items-center"><span><strong>${inc.lower}</strong> <span class="mx-2 text-primary">⊆</span> <strong>${inc.upper}</strong></span></div></li>`
   ).join(''),
@@ -160,7 +167,16 @@ const listConfigs = {
     : `<li class="list-group-item text-muted">No manual MTG entries found.</li>`,
   MTGList: data => data.length
     ? data.map(mtg =>
-      `<li class="list-group-item"><strong>${mtg.lower}</strong> <span class="mx-2 text-primary">&#8594;</span> <strong>${mtg.upper}</strong></li>`
+      `<li class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center">
+          <span><strong>${mtg.lower}</strong> <span class="mx-2 text-primary">&#8594;</span> <strong>${mtg.upper}</strong></span>
+        </div>
+        ${mtg.method === 'transitivity' 
+          ? `<div class="text-muted small mt-1">
+              <em>Derived from:</em> ${mtg.row1?.lower || ''} → ${mtg.row1?.upper || ''} and ${mtg.row2?.lower || ''} → ${mtg.row2?.upper || ''}
+             </div>`
+          : ''}
+      </li>`
     ).join('')
     : `<li class="list-group-item text-muted">No MTG entries found.</li>`,
   manualMMGList: data => data.length
@@ -170,14 +186,23 @@ const listConfigs = {
     : `<li class="list-group-item text-muted">No manual MMG entries found.</li>`,
   MMGList: data => data.length
     ? data.map(mmg =>
-      `<li class="list-group-item"><strong>${mmg.lower}</strong> <span class="mx-2 text-primary">&#8594;</span> <strong>${mmg.upper}</strong></li>`
+      `<li class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center">
+          <span><strong>${mmg.lower}</strong> <span class="mx-2 text-primary">&#8594;</span> <strong>${mmg.upper}</strong></span>
+        </div>
+        ${mmg.method === 'transitivity'
+          ? `<div class="text-muted small mt-1">
+              <em>Derived from:</em> ${mmg.row1?.lower || ''} → ${mmg.row1?.upper || ''} and ${mmg.row2?.lower || ''} → ${mmg.row2?.upper || ''}
+             </div>`
+          : ''}
+      </li>`
     ).join('')
     : `<li class="list-group-item text-muted">No MMG entries found.</li>`,
 };
 
 function toggleList(listId) {
   const lists = [
-    'modesList', 'typesList', 'machinesList', 'resourcesList',
+    'modesList', 'typesList', 'machinesList',
     'problemTypesList', 'boundsList', 'classesList', 'inclusionsList', 'methodsList', 
     'manualMTGList', 'MTGList', 'manualMMGList', 'MMGList'
   ];
