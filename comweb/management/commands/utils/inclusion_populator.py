@@ -1,3 +1,4 @@
+from django.db import connection
 from comweb.models import MMG, MTG, AutoInclusion, Class, Method
 
 def populate_methods(method_data):
@@ -63,5 +64,53 @@ def populate_auto_inclusions():
                     )
             except AttributeError as e:
                 print(f"Error processing classes {c1.AB} and {c2.AB}: {e}")
+
+    # Then compute transitive closure using recursive CTE
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            WITH RECURSIVE inclusion_closure AS (
+                -- Base case: direct inclusions
+                SELECT 
+                    lower_id, 
+                    upper_id,
+                    method_id
+                FROM comweb_autoinclusion
+                
+                UNION
+                
+                -- Recursive case
+                SELECT 
+                    c.lower_id, 
+                    i.upper_id,
+                    m.id as method_id
+                FROM inclusion_closure c
+                JOIN comweb_autoinclusion i ON c.upper_id = i.lower_id
+                CROSS JOIN comweb_method m
+                WHERE m.ab = 'transitivity'
+            )
+            SELECT DISTINCT lower_id, upper_id, method_id
+            FROM inclusion_closure 
+            WHERE lower_id != upper_id
+            AND NOT EXISTS (
+                SELECT 1 
+                FROM comweb_autoinclusion ai 
+                WHERE ai.lower_id = inclusion_closure.lower_id 
+                AND ai.upper_id = inclusion_closure.upper_id
+            );
+        """)
+        rows = cursor.fetchall()
+
+    # Bulk create new transitive inclusions
+    new_inclusions = [
+        AutoInclusion(
+            lower_id=lower_id,
+            upper_id=upper_id,
+            method_id=method_id
+        ) for lower_id, upper_id, method_id in rows
+    ]
+    
+    if new_inclusions:
+        AutoInclusion.objects.bulk_create(new_inclusions)
+
 
 
