@@ -144,3 +144,37 @@ class ManualInclusion(models.Model):
 
     def __str__(self):
         return f"{self.lower.AB} ⊆ {self.upper.AB}: {self.justification}"
+    
+class Inclusion(models.Model):
+    lower = models.ForeignKey(
+        Class, 
+        on_delete=models.CASCADE, 
+        related_name='inclusion_lower_classes'
+    )
+    upper = models.ForeignKey(
+        Class, 
+        on_delete=models.CASCADE, 
+        related_name='inclusion_upper_classes'
+    )
+    method = models.ForeignKey(
+        Method, 
+        on_delete=models.PROTECT, 
+        related_name='inclusions'
+    )
+    row1 = models.ForeignKey(
+        ManualInclusion, 
+        null=True, 
+        blank=True, 
+        on_delete=models.SET_NULL,
+        related_name='inclusion_row1_set'
+    )
+    row2 = models.ForeignKey(
+        ManualInclusion, 
+        null=True, 
+        blank=True, 
+        on_delete=models.SET_NULL,
+        related_name='inclusion_row2_set'
+    )
+
+    def __str__(self):
+        return f"{self.lower.AB} ⊆ {self.upper.AB} by {self.method.AB}"
