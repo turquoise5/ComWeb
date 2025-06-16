@@ -15,18 +15,20 @@ from configparser import ConfigParser
 from django.urls import reverse
 import os
 
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = "django-insecure-4u+$@ith-_$3%gt1euh+cv6t#rybcgj0!sdxi=tji2v5iei-l_"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-
+load_dotenv()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+SECRET_KEY=os.getenv('SECRET_KEY')
 
-ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', '.now.sh']
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', '.now.sh', 'localhost']
 
 # Application definition
 INSTALLED_APPS = [
@@ -79,14 +81,15 @@ WSGI_APPLICATION = 'project.wsgi.application'
 #     }
 # }
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',  
-        'USER': 'postgres',
-        'PASSWORD': 'KoqMztQicsoqAhbGBGWxOHMRbsVhfoth',      
-        'HOST': 'interchange.proxy.rlwy.net',  # or your database host
-        'PORT': '13204',  # default PostgreSQL port
+        'NAME': os.getenv('DB_NAME'),  
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),      
+        'HOST': os.getenv('DB_HOST'),  
+        'PORT': os.getenv('DB_PORT'),  # default PostgreSQL port
     }
 }
 
