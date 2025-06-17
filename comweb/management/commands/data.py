@@ -5,7 +5,7 @@ modes_data = [
             {"NA": "alternating", "AB": "A", "SO": 2},
             {"NA": "lasvegas", "AB": "P0", "SO": 3}, 
             {"NA": "montecarlo", "AB": "P1", "SO": 4},
-            {"NA": "bounded error", "AB": "P2", "SO": 5},
+            {"NA": "bounded-error", "AB": "P2", "SO": 5},
             {"NA": "probabilistic", "AB": "P", "SO": 6},
             {"NA": "quantum", "AB": "Q", "SO": 7},
             {"NA": "general", "AB": "*", "SO": 9},
@@ -14,7 +14,7 @@ modes_data = [
 types_data = [
             {"NA": "Turing machine", "AB": "TM", "SO": 2},
             {"NA": "finite automaton", "AB": "FA", "SO": 0},
-            {"NA": "pushdown automaton", "AB": "PA", "SO": 1},
+            {"NA": "pushdown automaton", "AB": "PDA", "SO": 1},
             {"NA": "linear bounded automaton", "AB": "LBA", "SO": 1}
         ]
 
