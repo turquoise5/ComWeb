@@ -1,0 +1,64 @@
+{% extends 'comweb/base.html' %}
+
+{% block title %}Machine Type Generalizations{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Manual MTG Section -->
+    <section class="mb-5">
+        <h2 class="mb-4">Manual Machine Type Generalizations</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Lower Type</th>
+                        <th>Upper Type</th>
+                        <th>Justification</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mtg in manual_mtgs %}
+                    <tr>
+                        <td>{{ mtg.lower.NA }}</td>
+                        <td>{{ mtg.upper.NA }}</td>
+                        <td>{{ mtg.justification }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Derived MTG Section -->
+    <section>
+        <h2 class="mb-4">Derived Machine Type Generalizations</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Lower Type</th>
+                        <th>Upper Type</th>
+                        <th>Method</th>
+                        <th>Derived From</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mtg in mtgs %}
+                    <tr>
+                        <td>{{ mtg.lower.NA }}</td>
+                        <td>{{ mtg.upper.NA }}</td>
+                        <td>{{ mtg.method }}</td>
+                        <td>
+                            {% if mtg.method == 'transitivity' %}
+                                {{ mtg.row1.lower.NA }} → {{ mtg.row1.upper.NA }} and
+                                {{ mtg.row2.lower.NA }} → {{ mtg.row2.upper.NA }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}

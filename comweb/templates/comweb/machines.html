@@ -1,0 +1,33 @@
+{% extends 'comweb/base.html' %}
+
+{% block title %}Machines{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Machines</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Abbreviation</th>
+                    <th>Mode</th>
+                    <th>Type</th>
+                    <th>Sort Order</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for machine in machines %}
+                <tr>
+                    <td>{{ machine.NA }}</td>
+                    <td>{{ machine.AB }}</td>
+                    <td>{{ machine.mode.NA }}</td>
+                    <td>{{ machine.type.NA }}</td>
+                    <td>{{ machine.SO }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

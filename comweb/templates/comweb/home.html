@@ -48,84 +48,61 @@
           <button class="btn btn-primary">Query</button>
         </div>
       </li>
-    </ul>
-
-    <!-- Toggle Button and List -->
+    </ul>    <!-- Navigation Cards -->
     <div class="container mt-4">
-      <div class="row">
-        <div class="col-md-6">
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('modesList')">Show Machine Modes</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('typesList')">Show Machine Types</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('machinesList')">Show Machines</button>          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('problemTypesList')">Show Problem Types</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('boundsList')">Show Resource Bounds</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('classesList')">Show Classes</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('inclusionsList')">Show Inclusions</button> 
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('methodsList')">Show methods of proving inclusion between classes</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('manualMTGList')">Manual MTG</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('MTGList')">MTG</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('manualMMGList')">Manual MMG</button>
-          <button class="btn btn-outline-secondary mb-2 w-100" onclick="toggleList('MMGList')">MMG</button>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <!-- Machine Information Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Machine Information</h5>
+              <p class="card-text">View information about machine types, modes, and their combinations.</p>
+              <a href="{% url 'machine_info' %}" class="btn btn-primary">View Machines</a>
+            </div>
+          </div>
         </div>
-        <div class="col-md-6">
-          <div id="modesList" class="mb-2" style="display:none;">
-            <h6>Machine Modes</h6>
-            <ul class="list-group" id="modesListContent">
-            </ul>
+
+        <!-- Complexity Information Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Complexity Information</h5>
+              <p class="card-text">Explore resource bounds, problem types, and complexity classes.</p>
+              <a href="{% url 'complexity_info' %}" class="btn btn-primary">View Classes</a>
+            </div>
           </div>
-          <div id="typesList" class="mb-2" style="display:none;">
-            <h6>Machine Types</h6>
-            <ul class="list-group" id="typesListContent">
-            </ul>
+        </div>
+
+        <!-- Inclusions Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Class Inclusions</h5>
+              <p class="card-text">View relationships and inclusions between complexity classes.</p>
+              <a href="{% url 'inclusions' %}" class="btn btn-primary">View Inclusions</a>
+            </div>
           </div>
-          <div id="machinesList" class="mb-2" style="display:none;">
-            <h6>Machines</h6>
-            <ul class="list-group" id="machinesListContent">
-            </ul>
+        </div>
+
+        <!-- Machine Type Relations Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Machine Type Relations</h5>
+              <p class="card-text">Explore relationships between different types of machines.</p>
+              <a href="{% url 'mtg' %}" class="btn btn-primary">View MTG</a>
+            </div>
           </div>
-          <div id="problemTypesList" class="mb-2" style="display:none;">
-            <h6>Problem Types</h6>
-            <ul class="list-group" id="problemTypesListContent">
-            </ul>
-          </div>
-          <div id="boundsList" class="mb-2" style="display:none;">
-            <h6>Resource Bounds</h6>
-            <ul class="list-group" id="boundsListContent">
-            </ul>
-          </div>
-          <div id="classesList" class="mb-2" style="display:none;">
-            <h6>Classes</h6>
-            <ul class="list-group" id="classesListContent">
-            </ul>
-          </div>
-          <div id="inclusionsList" class="mb-2" style="display:none;">
-            <h6>Inclusions</h6>
-            <ul class="list-group" id="inclusionsListContent">
-            </ul>
-          </div>
-          <div id="methodsList" class="mb-2" style="display:none;">
-            <h6>Methods of Proving Inclusion</h6>
-            <ul class="list-group" id="methodsListContent"> 
-            </ul>
-          </div>
-          <div id="manualMTGList" class="mb-2" style="display:none;">
-            <h6>Manual MTG</h6>
-            <ul class="list-group" id="manualMTGListContent">
-            </ul>
-          </div>
-          <div id="MTGList" class="mb-2" style="display:none;">
-            <h6>MTG</h6>
-            <ul class="list-group" id="MTGListContent">
-            </ul>
-          </div>
-          <div id="manualMMGList" class="mb-2" style="display:none;">
-            <h6>Manual MMG</h6>
-            <ul class="list-group" id="manualMMGListContent">
-            </ul>
-          </div>
-          <div id="MMGList" class="mb-2" style="display:none;">
-            <h6>MMG</h6>
-            <ul class="list-group" id="MMGListContent">
-            </ul>
+        </div>
+
+        <!-- Machine Mode Relations Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Machine Mode Relations</h5>
+              <p class="card-text">Explore relationships between different machine modes.</p>
+              <a href="{% url 'mmg' %}" class="btn btn-primary">View MMG</a>
+            </div>
           </div>
         </div>
       </div>

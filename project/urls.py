@@ -16,13 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from comweb.views import *
+from comweb import views
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home, name="home"),
-    path('get_list/', get_list, name="get_list"),
+    path('', views.home, name="home"),    path('machine-info/', views.machine_info_view, name='machine_info'),
+    path('complexity-info/', views.complexity_info_view, name='complexity_info'),
+    path('inclusions/', views.inclusions_view, name='inclusions'),
+    path('mtg/', views.mtg_view, name='mtg'),
+    path('mmg/', views.mmg_view, name='mmg'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

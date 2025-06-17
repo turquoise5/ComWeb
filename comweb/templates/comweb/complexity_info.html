@@ -1,0 +1,92 @@
+{% extends 'comweb/base.html' %}
+
+{% block title %}Resource Bounds, Problem Types, and Classes{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Resource Bounds Section -->
+    <section class="mb-5">
+        <h2 class="mb-4">Resource Bounds</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Abbreviation</th>
+                        <th>Sort Order</th>
+                        <th>Order</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bound in bounds %}
+                    <tr>
+                        <td>{{ bound.NA }}</td>
+                        <td>{{ bound.AB }}</td>
+                        <td>{{ bound.SO }}</td>
+                        <td>{{ bound.order }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Problem Types Section -->
+    <section class="mb-5">
+        <h2 class="mb-4">Problem Types</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Sort Order</th>
+                        <th>Order</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for type in problem_types %}
+                    <tr>
+                        <td>{{ type.NA }}</td>
+                        <td>{{ type.SO }}</td>
+                        <td>{{ type.order }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Classes Section -->
+    <section>
+        <h2 class="mb-4">Complexity Classes</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Abbreviation</th>
+                        <th>Problem Type</th>
+                        <th>Machine</th>
+                        <th>Time Bound</th>
+                        <th>Space Bound</th>
+                        <th>Alternations Bound</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for class in classes %}
+                    <tr>
+                        <td>{{ class.NA }}</td>
+                        <td>{{ class.AB }}</td>
+                        <td>{{ class.problem_type.NA }}</td>
+                        <td>{{ class.machine.NA }}</td>
+                        <td>{% if class.time_bound %}{{ class.time_bound.NA }}{% endif %}</td>
+                        <td>{% if class.space_bound %}{{ class.space_bound.NA }}{% endif %}</td>
+                        <td>{% if class.alternations_bound %}{{ class.alternations_bound.NA }}{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}

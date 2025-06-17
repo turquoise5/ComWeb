@@ -1,0 +1,63 @@
+{% extends 'comweb/base.html' %}
+
+{% block title %}Class Inclusions{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Manual Inclusions Section -->
+    <section class="mb-5">
+        <h2 class="mb-4">Manual Class Inclusions</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Lower Class</th>
+                        <th>Upper Class</th>
+                        <th>Justification</th>
+                        <th>References</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inc in manual_inclusions %}
+                    <tr>
+                        <td>{{ inc.lower.AB }} ({{ inc.lower.NA }})</td>
+                        <td>{{ inc.upper.AB }} ({{ inc.upper.NA }})</td>
+                        <td>{{ inc.justification }}</td>
+                        <td>
+                            {% for ref in inc.references.all %}
+                                <div>{{ ref.doi }} ({{ ref.locator }})</div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Auto Inclusions Section -->
+    <section class="mb-5">
+        <h2 class="mb-4">Automatically Derived Inclusions</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Lower Class</th>
+                        <th>Upper Class</th>
+                        <th>Method</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inc in auto_inclusions %}
+                    <tr>
+                        <td>{{ inc.lower.AB }} ({{ inc.lower.NA }})</td>
+                        <td>{{ inc.upper.AB }} ({{ inc.upper.NA }})</td>
+                        <td>{{ inc.method.NA }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}
