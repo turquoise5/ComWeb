@@ -50,20 +50,27 @@ def inclusions_view(request):
     return render(request, "comweb/inclusions.html", context)
 
 def mtg_view(request):
+    manual_mtgs = ManualMTG.objects.select_related(
+        'lower', 
+        'upper'
+    ).all()
     mtgs = MTG.objects.select_related(
         'lower', 'upper',
         'row1__lower', 'row1__upper',
         'row2__lower', 'row2__upper'
     ).all()
-    context = {'mtgs': mtgs}
+    context = {'mtgs': mtgs, manual_mtgs: manual_mtgs}
     return render(request, "comweb/mtg.html", context)
 
 def mmg_view(request):
+    manual_mmgs = ManualMMG.objects.select_related(
+        'lower', 
+        'upper'
+    ).all()
     mmgs = MMG.objects.select_related(
         'lower', 'upper',
         'row1__lower', 'row1__upper',
         'row2__lower', 'row2__upper'
     ).all()
-    context = {'mmgs': mmgs}
+    context = {'mmgs': mmgs, manual_mmgs: manual_mmgs}
     return render(request, "comweb/mmg.html", context)
-
