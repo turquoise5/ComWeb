@@ -43,9 +43,15 @@ def inclusions_view(request):
         'upper',
         'method'
     ).all()
+    all_inclusions = Inclusion.objects.select_related(
+        'lower', 
+        'upper',
+        'method'
+    ).all()
     context = {
         'manual_inclusions': manual_inclusions,
-        'auto_inclusions': auto_inclusions
+        'auto_inclusions': auto_inclusions, 
+        'all_inclusions': all_inclusions
     }
     return render(request, "comweb/inclusions.html", context)
 
@@ -59,7 +65,7 @@ def mtg_view(request):
         'row1__lower', 'row1__upper',
         'row2__lower', 'row2__upper'
     ).all()
-    context = {'mtgs': mtgs, manual_mtgs: manual_mtgs}
+    context = {'mtgs': mtgs, "manual_mtgs": manual_mtgs}
     return render(request, "comweb/mtg.html", context)
 
 def mmg_view(request):
@@ -72,5 +78,5 @@ def mmg_view(request):
         'row1__lower', 'row1__upper',
         'row2__lower', 'row2__upper'
     ).all()
-    context = {'mmgs': mmgs, manual_mmgs: manual_mmgs}
+    context = {'mmgs': mmgs, "manual_mmgs": manual_mmgs}
     return render(request, "comweb/mmg.html", context)

@@ -20,8 +20,8 @@
                 <tbody>
                     {% for inc in manual_inclusions %}
                     <tr>
-                        <td>{{ inc.lower.AB }} ({{ inc.lower.NA }})</td>
-                        <td>{{ inc.upper.AB }} ({{ inc.upper.NA }})</td>
+                        <td>{{ inc.lower.AB }}</td>
+                        <td>{{ inc.upper.AB }}</td>
                         <td>{{ inc.justification }}</td>
                         <td>
                             {% for ref in inc.references.all %}
@@ -50,9 +50,36 @@
                 <tbody>
                     {% for inc in auto_inclusions %}
                     <tr>
-                        <td>{{ inc.lower.AB }} ({{ inc.lower.NA }})</td>
-                        <td>{{ inc.upper.AB }} ({{ inc.upper.NA }})</td>
+                        <td>{{ inc.lower.AB }}</td>
+                        <td>{{ inc.upper.AB }}</td>
                         <td>{{ inc.method.NA }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+        <section class="mb-5">
+        <h2 class="mb-4">All Derived Inclusions</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Lower Class</th>
+                        <th>Upper Class</th>
+                        <th>Method</th>
+                        <th> Derived from </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inc in all_inclusions %}
+                    <tr>
+                        <td>{{ inc.lower.AB }}</td>
+                        <td>{{ inc.upper.AB }}</td>
+                        <td>
+                            {{ inc.row1.lower.AB }} ⊆ {{ inc.row1.upper.AB }} and
+                            {{ inc.row2.lower.AB }} ⊆ {{ inc.row2.upper.AB }}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
