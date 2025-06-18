@@ -56,7 +56,7 @@
           <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">Machine Information</h5>
-              <p class="card-text">View information about machine types, modes, and their combinations.</p>
+              <p class="card-text">machine types, machine modes, and their combinations.</p>
               <a href="{% url 'machine_info' %}" class="btn btn-primary">View Machines</a>
             </div>
           </div>
@@ -66,8 +66,8 @@
         <div class="col">
           <div class="card h-100">
             <div class="card-body">
-              <h5 class="card-title">Complexity Information</h5>
-              <p class="card-text">Explore resource bounds, problem types, and complexity classes.</p>
+              <h5 class="card-title">Class Information</h5>
+              <p class="card-text">resource bounds, problem types, and complexity classes.</p>
               <a href="{% url 'complexity_info' %}" class="btn btn-primary">View Classes</a>
             </div>
           </div>
@@ -78,7 +78,6 @@
           <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">Class Inclusions</h5>
-              <p class="card-text">View relationships and inclusions between complexity classes.</p>
               <a href="{% url 'inclusions' %}" class="btn btn-primary">View Inclusions</a>
             </div>
           </div>
@@ -88,8 +87,8 @@
         <div class="col">
           <div class="card h-100">
             <div class="card-body">
-              <h5 class="card-title">Machine Type Relations</h5>
-              <p class="card-text">Explore relationships between different types of machines.</p>
+              <h5 class="card-title">Machine Type Generalizations</h5>
+              <p class="card-text">relationships between different types of machines.</p>
               <a href="{% url 'mtg' %}" class="btn btn-primary">View MTG</a>
             </div>
           </div>
@@ -99,8 +98,8 @@
         <div class="col">
           <div class="card h-100">
             <div class="card-body">
-              <h5 class="card-title">Machine Mode Relations</h5>
-              <p class="card-text">Explore relationships between different machine modes.</p>
+              <h5 class="card-title">Machine Mode Generalizations</h5>
+              <p class="card-text">relationships between different machine modes.</p>
               <a href="{% url 'mmg' %}" class="btn btn-primary">View MMG</a>
             </div>
           </div>
@@ -108,104 +107,4 @@
       </div>
     </div>
   </div>
-  <script>
-const listConfigs = {
-  modesList: data => data.map(mode => `<li class="list-group-item py-1">${mode}</li>`).join(''),
-  typesList: data => data.map(type => 
-    `<li class="list-group-item py-1 d-flex justify-content-between align-items-center">
-      <span>${type.name}</span>
-      <span class="badge bg-secondary">${type.AB}</span>
-    </li>`
-  ).join(''),
-  machinesList: data => data.map(machine => 
-    `<li class="list-group-item py-1 d-flex justify-content-between align-items-center">
-      <span>${machine.name}</span>
-      <span class="badge bg-secondary">${machine.AB}</span>
-    </li>`
-  ).join(''),
-  problemTypesList: data => data.map(pt => `<li class="list-group-item py-1">${pt}</li>`).join(''),
-  boundsList: data => data.map(bound => `<li class="list-group-item py-1">${bound}</li>`).join(''),
-  classesList: data => data.map(c => 
-    `<li class="list-group-item py-1 d-flex justify-content-between align-items-center">
-      <span>${c.name}</span>
-      <span class="badge bg-secondary">${c.AB}</span>
-    </li>`
-  ).join(''),
-  inclusionsList: data => data.map(inc =>
-    `<li class="list-group-item"><div class="d-flex justify-content-between align-items-center"><span><strong>${inc.lower}</strong> <span class="mx-2 text-primary">⊆</span> <strong>${inc.upper}</strong></span></div></li>`
-  ).join(''),
-  methodsList: data => data.map(method =>
-    `<li class="list-group-item py-1">${method.name}</li><li class="list-group-item py-1">${method.description}</li>`
-  ).join(''),
-  manualMTGList: data => data.length
-    ? data.map(mtg =>
-      `<li class="list-group-item"><div class="d-flex justify-content-between align-items-center"><span><strong>${mtg.lower}</strong> <span class="mx-2 text-primary">&#8594;</span> <strong>${mtg.upper}</strong></span></div><div class="text-muted small mt-1"><em>Justification:</em> ${mtg.justification}</div></li>`
-    ).join('')
-    : `<li class="list-group-item text-muted">No manual MTG entries found.</li>`,
-  MTGList: data => data.length
-    ? data.map(mtg =>
-      `<li class="list-group-item">
-        <div class="d-flex justify-content-between align-items-center">
-          <span><strong>${mtg.lower}</strong> <span class="mx-2 text-primary">&#8594;</span> <strong>${mtg.upper}</strong></span>
-        </div>
-        ${mtg.method === 'transitivity' 
-          ? `<div class="text-muted small mt-1">
-              <em>Derived from:</em> ${mtg.row1?.lower || ''} → ${mtg.row1?.upper || ''} and ${mtg.row2?.lower || ''} → ${mtg.row2?.upper || ''}
-             </div>`
-          : ''}
-      </li>`
-    ).join('')
-    : `<li class="list-group-item text-muted">No MTG entries found.</li>`,
-  manualMMGList: data => data.length
-    ? data.map(mmg =>
-      `<li class="list-group-item"><div class="d-flex justify-content-between align-items-center"><span><strong>${mmg.lower}</strong> <span class="mx-2 text-primary">&#8594;</span> <strong>${mmg.upper}</strong></span></div><div class="text-muted small mt-1"><em>Justification:</em> ${mmg.justification}</div></li>`
-    ).join('')
-    : `<li class="list-group-item text-muted">No manual MMG entries found.</li>`,
-  MMGList: data => data.length
-    ? data.map(mmg =>
-      `<li class="list-group-item">
-        <div class="d-flex justify-content-between align-items-center">
-          <span><strong>${mmg.lower}</strong> <span class="mx-2 text-primary">&#8594;</span> <strong>${mmg.upper}</strong></span>
-        </div>
-        ${mmg.method === 'transitivity'
-          ? `<div class="text-muted small mt-1">
-              <em>Derived from:</em> ${mmg.row1?.lower || ''} → ${mmg.row1?.upper || ''} and ${mmg.row2?.lower || ''} → ${mmg.row2?.upper || ''}
-             </div>`
-          : ''}
-      </li>`
-    ).join('')
-    : `<li class="list-group-item text-muted">No MMG entries found.</li>`,
-};
-
-function toggleList(listId) {
-  const lists = [
-    'modesList', 'typesList', 'machinesList',
-    'problemTypesList', 'boundsList', 'classesList', 'inclusionsList', 'methodsList', 
-    'manualMTGList', 'MTGList', 'manualMMGList', 'MMGList'
-  ];
-  lists.forEach(id => {
-    const div = document.getElementById(id);
-    if (id === listId) {
-      if (div.style.display === 'none' || div.style.display === '') {
-        // Only fetch if not already loaded
-        if (!div.dataset.loaded) {
-          fetch(`/get_list/?type=${id}`)
-            .then(res => res.json())
-            .then(json => {
-              const ul = document.getElementById(id + 'Content');
-              ul.innerHTML = listConfigs[id](json.data);
-              div.dataset.loaded = 'true';
-            });
-        }
-        div.style.display = 'block';
-      } else {
-        div.style.display = 'none';
-      }
-    } else {
-      div.style.display = 'none';
-    }
-  });
-}
-  </script>
 </body>
-</html>
