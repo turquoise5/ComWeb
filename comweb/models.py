@@ -48,6 +48,8 @@ class Class(models.Model):
     AB = models.CharField(max_length=100)
     problem_type = models.ForeignKey(ProblemType, on_delete=models.CASCADE, related_name='classes')   
     machine = models.ForeignKey(Machine, on_delete=models.CASCADE, related_name='classes')
+    co = models.BooleanField(default=False)  # is this a co-complexity class?
+    co_class = models.ForeignKey('self', blank=True, null=True, on_delete=models.SET_NULL, related_name='co_classes')
     time_bound = models.ForeignKey(
         ResourceBound, 
         on_delete=models.CASCADE,
