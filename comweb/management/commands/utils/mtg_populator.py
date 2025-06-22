@@ -1,6 +1,6 @@
 from django.db import connection
 from comweb.models import MTG, ManualMTG
-from comweb.management.commands.mmg_mtg_data import get_manual_mtg
+from comweb.management.commands.data.mmg_mtg_data import get_manual_mtg
 
 def populate_mtg():
     # Create manual entries
@@ -12,7 +12,7 @@ def populate_mtg():
         MTG(
             lower_id=data['lower'].id,
             upper_id=data['upper'].id,
-            method="manual",
+            method=data['justification'],
             row1=None,
             row2=None
         ) for data in manual_mtg_data
