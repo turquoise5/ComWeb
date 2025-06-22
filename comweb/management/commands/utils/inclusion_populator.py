@@ -1,5 +1,5 @@
 from django.db import connection
-from comweb.models import MMG, MTG, AutoInclusion, Class, Method
+from comweb.models import MMG, MTG, AutoInclusion, Class, Inclusion, ManualInclusion, Method
 
 def populate_methods(method_data):
     """Populate the Method table with predefined methods."""
@@ -18,7 +18,7 @@ def machine_type_le(type1, type2, mtg_pairs):
     return (type1.id, type2.id) in mtg_pairs
     
 
-def populate_auto_inclusions(): 
+def populate_inclusions(manual_inclusions): 
     all_classes = list(Class.objects.select_related(
         'problem_type', 
         'machine', 
@@ -44,6 +44,8 @@ def populate_auto_inclusions():
 
     for c1 in all_classes: 
         for c2 in all_classes: 
+            if c1 == c2 or c1.co_class == c2: 
+                continue  # Skip self-comparisons and co-class comparisons
             try:
                 mode_le = machine_mode_le(c1.machine.mode, c2.machine.mode, mmg_pairs)
                 type_le = machine_type_le(c1.machine.type, c2.machine.type, mtg_pairs)
@@ -56,8 +58,14 @@ def populate_auto_inclusions():
                      mode_le and type_le and
                      time_bound_le and space_bound_le and alternations_bound_le)
 
-                if le and c1 != c2:
-                    AutoInclusion.objects.get_or_create(
+                if le: # ensure c1, c2 are not co-classes
+                    auto_inc = AutoInclusion.objects.get_or_create(
+                        lower=c1,
+                        upper=c2,
+                        method=get_method(c1, c2, mmg_pairs, mtg_pairs, methods)
+                    )[0]
+                    # Also create an Inclusion for each AutoInclusion
+                    Inclusion.objects.get_or_create(
                         lower=c1,
                         upper=c2,
                         method=get_method(c1, c2, mmg_pairs, mtg_pairs, methods)
@@ -65,52 +73,76 @@ def populate_auto_inclusions():
             except AttributeError as e:
                 print(f"Error processing classes {c1.AB} and {c2.AB}: {e}")
 
-    # Then compute transitive closure using recursive CTE
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            WITH RECURSIVE inclusion_closure AS (
-                -- Base case: direct inclusions
-                SELECT 
-                    lower_id, 
-                    upper_id,
-                    method_id
-                FROM comweb_autoinclusion
-                
-                UNION
-                
-                -- Recursive case
-                SELECT 
-                    c.lower_id, 
-                    i.upper_id,
-                    m.id as method_id
-                FROM inclusion_closure c
-                JOIN comweb_autoinclusion i ON c.upper_id = i.lower_id
-                CROSS JOIN comweb_method m
-                WHERE m.ab = 'transitivity'
-            )
-            SELECT DISTINCT lower_id, upper_id, method_id
-            FROM inclusion_closure 
-            WHERE lower_id != upper_id
-            AND NOT EXISTS (
-                SELECT 1 
-                FROM comweb_autoinclusion ai 
-                WHERE ai.lower_id = inclusion_closure.lower_id 
-                AND ai.upper_id = inclusion_closure.upper_id
-            );
-        """)
-        rows = cursor.fetchall()
-
-    # Bulk create new transitive inclusions
-    new_inclusions = [
-        AutoInclusion(
-            lower_id=lower_id,
-            upper_id=upper_id,
-            method_id=method_id
-        ) for lower_id, upper_id, method_id in rows
-    ]
+    populate_manual_inclusions(manual_inclusions)
+    # Add manual inclusions to the Inclusion table
+    for manual_inc in manual_inclusions:
+        Inclusion.objects.get_or_create(
+            lower=manual_inc["lower"],
+            upper=manual_inc["upper"],
+            method=methods.get("manual"),
+        )    
     
-    if new_inclusions:
-        AutoInclusion.objects.bulk_create(new_inclusions)
+    # Get all classes and create an adjacency matrix
+    classes = list(Class.objects.all())
+    n = len(classes)
+    class_to_idx = {c.id: i for i, c in enumerate(classes)}
+    idx_to_class = {i: c for i, c in enumerate(classes)}
+    
+    # Initialize adjacency matrix and path reconstruction matrix
+    adj_matrix = [[False] * n for _ in range(n)]
+    path = [[None] * n for _ in range(n)]  # Store the intermediate paths
+    
+    # Fill the adjacency matrix with existing inclusions
+    inclusions = list(Inclusion.objects.all())
+    for inc in inclusions:
+        i = class_to_idx[inc.lower_id]
+        j = class_to_idx[inc.upper_id]
+        if inc.lower.co_class.id == inc.upper_id:
+            # If co-C ⊆ C, then add C ⊆ co-C
+            adj_matrix[j][i] = True
+            path[j][i] = inc
+        adj_matrix[i][j] = True
+        path[i][j] = inc
+    
+    # Floyd-Warshall algorithm for transitive closure
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if not adj_matrix[i][j] and adj_matrix[i][k] and adj_matrix[k][j] and i != j:
+                    # Found a new transitive relationship
+                    adj_matrix[i][j] = True
+                    
+                    # Create new inclusion using transitivity
+                    new_inclusion = Inclusion.objects.create(
+                        lower=idx_to_class[i],
+                        upper=idx_to_class[j],
+                        method=methods.get("trans"),
+                        row1=path[i][k],  # First inclusion used
+                        row2=path[k][j]   # Second inclusion used
+                    )
+                    path[i][j] = new_inclusion
+    
+    # if co-C ⊆  C then add C ⊆ co-C and vice versa
 
+    
 
+# def populate_manual_inclusions(manual_inclusion_data):
+#     ManualInclusion.objects.bulk_create([ManualInclusion(**data) for data in manual_inclusion_data])
 
+def populate_manual_inclusions(manual_inclusion_data):
+    # Remove references from the dicts for bulk_create
+    manual_inclusion_objs = []
+    references_map = []
+    for data in manual_inclusion_data:
+        refs = data.pop('references', None)
+        manual_inclusion_objs.append(ManualInclusion(**data))
+        references_map.append(refs)
+
+    # Bulk create ManualInclusion objects
+    created_objs = ManualInclusion.objects.bulk_create(manual_inclusion_objs)
+
+    # Set references for each created object
+    for obj, refs in zip(created_objs, references_map):
+        if refs:
+            # refs is a tuple (object, created), so use refs[0]
+            obj.references.set([refs[0]])
