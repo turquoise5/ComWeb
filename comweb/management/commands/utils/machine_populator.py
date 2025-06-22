@@ -18,8 +18,8 @@ def populate_machines(modes_data, types_data):
             type_so = str(typ['SO']).zfill(2)
                 
             machines_data.append({
-                "NA": f"{mode['NA']} {typ['NA']}",
-                "AB": f"{mode['AB']}-{typ['AB']}",
+                "NA": f"{mode['NA']} {typ['NA']}" if mode['NA'] != "general" else typ['NA'],
+                "AB": f"{mode['AB']}{typ['AB']}" if mode['AB'] != "*" else typ['AB'],
                 "SO": int(f"{type_so}{mode_so}"),
                 "mode": mode_objs[mode['NA']],
                 "type": type_objs[typ['NA']]
