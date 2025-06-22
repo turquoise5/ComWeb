@@ -163,17 +163,19 @@ class Inclusion(models.Model):
     method = models.ForeignKey(
         Method, 
         on_delete=models.PROTECT, 
+        null=True,
+        blank=True,
         related_name='inclusions'
     )
     row1 = models.ForeignKey(
-        ManualInclusion, 
+        "self", 
         null=True, 
         blank=True, 
         on_delete=models.SET_NULL,
         related_name='inclusion_row1_set'
     )
     row2 = models.ForeignKey(
-        ManualInclusion, 
+        "self", 
         null=True, 
         blank=True, 
         on_delete=models.SET_NULL,
