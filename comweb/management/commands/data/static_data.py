@@ -69,5 +69,17 @@ method_data = [
                 "SO": 3,
                 "DE": "Proving inclusion by generalizing the machine type (e.g., finite automaton to Turing machine)."
             },
+            {
+                "NA": "transitivity", 
+                "AB": "trans",
+                "SO": 4,
+                "DE": "Proving inclusion by transitivity (e.g., if A ⊆ B and B ⊆ C, then A ⊆ C)."
+            },
+            {
+                "NA": "manual inclusion",
+                "AB": "manual",
+                "SO": 5,
+                "DE": "Inclusion added manually (a theorem; see references)."
+            }
         ]
         
