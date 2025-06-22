@@ -6,7 +6,7 @@
 <div class="container">
     <!-- Manual MTG Section -->
     <section class="mb-5">
-        <h2 class="mb-4">Manual Machine Type Generalizations</h2>
+        <h2 class="mb-4">Manual Machine Type Generalizations (ManualMTG)</h2>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -31,7 +31,7 @@
 
     <!-- Derived MTG Section -->
     <section>
-        <h2 class="mb-4">All Machine Type Generalizations</h2>
+        <h2 class="mb-4">All Machine Type Generalizations (MTG)</h2>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -50,8 +50,9 @@
                         <td>{{ mtg.method }}</td>
                         <td>
                             {% if mtg.method == 'transitivity' %}
-                                {{ mtg.row1.lower.NA }} → {{ mtg.row1.upper.NA }} and
-                                {{ mtg.row2.lower.NA }} → {{ mtg.row2.upper.NA }}
+                                transitivity: {{ mtg.row1.lower.NA }} → {{ mtg.row1.upper.NA }} → {{ mtg.row2.upper.NA }}
+                            {% else %}
+                                manual: {{ mtg.method }}
                             {% endif %}
                         </td>
                     </tr>
