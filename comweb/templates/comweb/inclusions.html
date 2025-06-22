@@ -60,7 +60,7 @@
         </div>
     </section>
         <section class="mb-5">
-        <h2 class="mb-4">All Derived Inclusions</h2>
+        <h2 class="mb-4">All Inclusions (Inclusion)</h2>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -68,7 +68,6 @@
                         <th>Lower Class</th>
                         <th>Upper Class</th>
                         <th>Method</th>
-                        <th> Derived from </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,8 +76,14 @@
                         <td>{{ inc.lower.AB }}</td>
                         <td>{{ inc.upper.AB }}</td>
                         <td>
-                            {{ inc.row1.lower.AB }} ⊆ {{ inc.row1.upper.AB }} and
-                            {{ inc.row2.lower.AB }} ⊆ {{ inc.row2.upper.AB }}
+                            {% if inc.method.AB == 'manual' %}
+                                manual: {{ inc.justification }}
+                                {% if inc.references.exists %}; see {% for ref in inc.references.all %}Theorem {{ ref.locator }} of [{{ ref.doi }}]{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}
+                            {% elif inc.method.AB == 'transitivity' %}
+                                transitivity: {{ inc.row1.lower.AB }} ⊆ {{ inc.row1.upper.AB }} ⊆ {{ inc.row2.upper.AB }}
+                            {% else %}
+                                auto: {{ inc.method.NA }}
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
