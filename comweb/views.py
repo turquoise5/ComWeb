@@ -6,9 +6,9 @@ def home(request):
     return render(request, "comweb/home.html")
 
 def machine_info_view(request):
-    types = MachineType.objects.all()
-    modes = MachineMode.objects.all()
-    machines = Machine.objects.select_related('mode', 'type').all()
+    types = MachineType.objects.all()[:50]
+    modes = MachineMode.objects.all()[:50]
+    machines = Machine.objects.select_related('mode', 'type').all()[:50]
     context = {
         'types': types,
         'modes': modes,
@@ -17,15 +17,15 @@ def machine_info_view(request):
     return render(request, "comweb/machine_info.html", context)
 
 def complexity_info_view(request):
-    bounds = ResourceBound.objects.all()
-    problem_types = ProblemType.objects.all()
+    bounds = ResourceBound.objects.all()[:50]
+    problem_types = ProblemType.objects.all()[:50]
     classes = Class.objects.select_related(
         'problem_type', 
         'machine',
         'time_bound',
         'space_bound',
         'alternations_bound'
-    ).all()
+    ).all()[:50]
     context = {
         'bounds': bounds,
         'problem_types': problem_types,
@@ -42,12 +42,12 @@ def inclusions_view(request):
         'lower', 
         'upper',
         'method'
-    ).all()
+    ).all()[:50]
     all_inclusions = Inclusion.objects.select_related(
         'lower', 
         'upper',
         'method'
-    ).all()
+    ).all()[:100]
     context = {
         'manual_inclusions': manual_inclusions,
         'auto_inclusions': auto_inclusions, 
@@ -59,12 +59,12 @@ def mtg_view(request):
     manual_mtgs = ManualMTG.objects.select_related(
         'lower', 
         'upper'
-    ).all()
+    ).all()[:50]
     mtgs = MTG.objects.select_related(
         'lower', 'upper',
         'row1__lower', 'row1__upper',
         'row2__lower', 'row2__upper'
-    ).all()
+    ).all()[:50]
     context = {'mtgs': mtgs, "manual_mtgs": manual_mtgs}
     return render(request, "comweb/mtg.html", context)
 
@@ -72,11 +72,11 @@ def mmg_view(request):
     manual_mmgs = ManualMMG.objects.select_related(
         'lower', 
         'upper'
-    ).all()
+    ).all()[:50]
     mmgs = MMG.objects.select_related(
         'lower', 'upper',
         'row1__lower', 'row1__upper',
         'row2__lower', 'row2__upper'
-    ).all()
+    ).all()[:50]
     context = {'mmgs': mmgs, "manual_mmgs": manual_mmgs}
     return render(request, "comweb/mmg.html", context)
