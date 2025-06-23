@@ -14,7 +14,7 @@ def get_manual_inclusions(classes):
             {
                 "lower": classes['N-REGULAR'],
                 "upper": classes['co-N-REGULAR'],
-                "justification": "closed under complementation",
+                "justification": "Closed under complementation",
                 "references": Reference.objects.get_or_create(
                     doi="",
                     locator=""
