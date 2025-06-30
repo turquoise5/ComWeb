@@ -101,6 +101,11 @@ def populate_inclusions(manual_inclusions):
             # If co-C ⊆ C, then add C ⊆ co-C
             adj_matrix[j][i] = True
             path[j][i] = inc
+            new_inclusion = Inclusion.objects.create(
+                lower=inc.upper,
+                upper=inc.lower,
+                method= methods.get("comp"),
+            )
         adj_matrix[i][j] = True
         path[i][j] = inc
     
