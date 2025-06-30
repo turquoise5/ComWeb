@@ -26,11 +26,19 @@ def complexity_info_view(request):
         'time_bound',
         'space_bound',
         'alternations_bound'
-    ).all()
+    ).order_by('AB')
+    co_map = {c.id: c.co_class for c in classes if not c.co}
+    ordered_classes =[]
+    for c in classes:
+        if not c.co: 
+            ordered_classes.append(c)
+            ordered_classes.append(co_map[c.id])
+
+
     context = {
         'bounds': bounds,
         'problem_types': problem_types,
-        'classes': classes
+        'classes': ordered_classes
     }
     return render(request, "comweb/complexity_info.html", context)
 
@@ -58,6 +66,14 @@ def inclusions_view(request):
     manual_paginator = Paginator(manual_inclusions, 50)
     auto_paginator = Paginator(auto_inclusions, 50)
     all_paginator = Paginator(all_inclusions, 50)
+
+    manual_just_map = {
+        (m.lower_id, m.upper_id): m.justification
+        for m in ManualInclusion.objects.all()
+    }
+    for inc in all_inclusions:
+        if inc.method and inc.method.AB == 'manual':
+            inc.manual_justification = manual_just_map.get((inc.lower_id, inc.upper_id), '')
 
     context = {
         'manual_inclusions_page': manual_paginator.get_page(manual_page_number),

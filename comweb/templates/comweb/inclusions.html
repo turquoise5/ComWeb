@@ -111,12 +111,12 @@
                         <td>{{ inc.upper.AB }}</td>
                         <td>
                             {% if inc.method.AB == 'manual' %}
-                                manual
+                                manual: {{ inc.manual_justification }}
                                 {% if inc.references.exists %}; see {% for ref in inc.references.all %}Theorem {{ ref.locator }} of [{{ ref.doi }}]{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}
                             {% elif inc.method.AB == 'trans' %}
                                 transitivity: {{ inc.row1.lower.AB }} ⊆ {{ inc.row1.upper.AB }} ⊆ {{ inc.row2.upper.AB }}
                             {% else %}
-                                auto: {{ inc.method.NA }}
+                                auto: {{ inc.method.NA }} ({{ inc.method.DE }})
                             {% endif %}
                         </td>
                     </tr>
