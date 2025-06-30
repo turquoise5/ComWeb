@@ -80,6 +80,12 @@ method_data = [
                 "AB": "manual",
                 "SO": 5,
                 "DE": "Inclusion added manually (a theorem; see references)."
+            },
+            {
+                "NA": "Complementation Closure", 
+                "AB": "comp", 
+                "SO": 6, 
+                "DE": "co-C is in C hence C is in co-C"
             }
         ]
         
