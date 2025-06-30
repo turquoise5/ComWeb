@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container">
     <!-- Manual Inclusions Section -->
-    <section class="mb-5">
+    <section class="mb-5" id="manual">
         <h2 class="mb-4">Manual Class Inclusions (ManualInclusion)</h2>
         <div class="table-responsive">
             <table class="table table-striped">
@@ -18,7 +18,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for inc in manual_inclusions %}
+                    {% for inc in manual_inclusions_page %}
                     <tr>
                         <td>{{ inc.lower.AB }}</td>
                         <td>{{ inc.upper.AB }}</td>
@@ -33,10 +33,27 @@
                 </tbody>
             </table>
         </div>
+        <nav>
+            <ul class="pagination">
+            {% if manual_inclusions_page.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?manual_page={{ manual_inclusions_page.previous_page_number }}#manual">Previous</a>
+            </li>
+            {% endif %}
+            <li class="page-item disabled">
+            <span class="page-link">Page {{ manual_inclusions_page.number }} of {{ manual_inclusions_page.paginator.num_pages }}</span>
+            </li>
+            {% if manual_inclusions_page.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?a_page={{ manual_inclusions_page.next_page_number }}#manual">Next</a>
+            </li>
+            {% endif %}
+            </ul>
+        </nav>
     </section>
 
     <!-- Auto Inclusions Section -->
-    <section class="mb-5">
+    <section class="mb-5" id="auto">
         <h2 class="mb-4">Automatically Derived Inclusions (AutoInclusion) </h2>
         <div class="table-responsive">
             <table class="table table-striped">
@@ -48,7 +65,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for inc in auto_inclusions %}
+                    {% for inc in auto_inclusions_page %}
                     <tr>
                         <td>{{ inc.lower.AB }}</td>
                         <td>{{ inc.upper.AB }}</td>
@@ -58,8 +75,25 @@
                 </tbody>
             </table>
         </div>
+            <nav>
+      <ul class="pagination">
+        {% if auto_inclusions_page.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?auto_page={{ auto_inclusions_page.previous_page_number }}#auto">Previous</a>
+          </li>
+        {% endif %}
+        <li class="page-item disabled">
+          <span class="page-link">Page {{ auto_inclusions_page.number }} of {{ auto_inclusions_page.paginator.num_pages }}</span>
+        </li>
+        {% if auto_inclusions_page.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?auto_page={{ auto_inclusions_page.next_page_number }}#auto">Next</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
     </section>
-        <section class="mb-5">
+        <section class="mb-5" id="all_inc">
         <h2 class="mb-4">All Inclusions (Inclusion)</h2>
         <div class="table-responsive">
             <table class="table table-striped">
@@ -71,13 +105,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for inc in all_inclusions %}
+                    {% for inc in all_inclusions_page %}
                     <tr>
                         <td>{{ inc.lower.AB }}</td>
                         <td>{{ inc.upper.AB }}</td>
                         <td>
                             {% if inc.method.AB == 'manual' %}
-                                manual: {{ inc.justification }}
+                                manual
                                 {% if inc.references.exists %}; see {% for ref in inc.references.all %}Theorem {{ ref.locator }} of [{{ ref.doi }}]{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}
                             {% elif inc.method.AB == 'trans' %}
                                 transitivity: {{ inc.row1.lower.AB }} ⊆ {{ inc.row1.upper.AB }} ⊆ {{ inc.row2.upper.AB }}
@@ -90,6 +124,23 @@
                 </tbody>
             </table>
         </div>
+        <nav>
+        <ul class="pagination">
+            {% if all_inclusions_page.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?all_page={{ all_inclusions_page.previous_page_number }}#all_inc">Previous</a>
+            </li>
+            {% endif %}
+            <li class="page-item disabled">
+            <span class="page-link">Page {{ all_inclusions_page.number }} of {{ all_inclusions_page.paginator.num_pages }}</span>
+            </li>
+            {% if all_inclusions_page.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?all_page={{ all_inclusions_page.next_page_number }}#all_inc">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+        </nav>
     </section>
 </div>
 {% endblock %}
