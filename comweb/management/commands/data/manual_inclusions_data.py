@@ -3,8 +3,8 @@ from comweb.models import Reference
 def get_manual_inclusions(classes):
     return ([
             {
-                "lower": classes['D-REGULAR'], 
-                "upper": classes['co-D-REGULAR'],
+                "lower": classes['co-D-REGULAR'], 
+                "upper": classes['D-REGULAR'],
                 "justification": "Closed under complementation",
                 "references": Reference.objects.get_or_create(
                     doi="",
@@ -12,8 +12,8 @@ def get_manual_inclusions(classes):
                 )
             }, 
             {
-                "lower": classes['N-REGULAR'],
-                "upper": classes['co-N-REGULAR'],
+                "lower": classes['co-N-REGULAR'],
+                "upper": classes['N-REGULAR'],
                 "justification": "Closed under complementation",
                 "references": Reference.objects.get_or_create(
                     doi="",
@@ -30,8 +30,8 @@ def get_manual_inclusions(classes):
                 )
             },
             {
-                "lower": classes["D-CONTEXT-FREE"],
-                "upper": classes["co-D-CONTEXT-FREE"],
+                "lower": classes["co-D-CONTEXT-FREE"],
+                "upper": classes["D-CONTEXT-FREE"],
                 "justification": "Closed under complementation",
                 "references": Reference.objects.get_or_create(
                     doi="",
