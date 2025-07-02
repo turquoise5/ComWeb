@@ -47,11 +47,6 @@ def inclusions_view(request):
         'lower', 
         'upper'
     ).prefetch_related('references').order_by('id')
-    auto_inclusions = AutoInclusion.objects.select_related(
-        'lower', 
-        'upper',
-        'method'
-    ).order_by('id')
     all_inclusions = Inclusion.objects.select_related(
         'lower', 
         'upper',
@@ -60,11 +55,9 @@ def inclusions_view(request):
 
     # Paginate each list (50 per page)
     manual_page_number = request.GET.get('manual_page', 1)
-    auto_page_number = request.GET.get('auto_page', 1)
     all_page_number = request.GET.get('all_page', 1)
 
     manual_paginator = Paginator(manual_inclusions, 50)
-    auto_paginator = Paginator(auto_inclusions, 50)
     all_paginator = Paginator(all_inclusions, 50)
 
     manual_just_map = {
@@ -77,7 +70,6 @@ def inclusions_view(request):
 
     context = {
         'manual_inclusions_page': manual_paginator.get_page(manual_page_number),
-        'auto_inclusions_page': auto_paginator.get_page(auto_page_number),
         'all_inclusions_page': all_paginator.get_page(all_page_number),
     }
     return render(request, "comweb/inclusions.html", context)

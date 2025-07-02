@@ -45,54 +45,13 @@
             </li>
             {% if manual_inclusions_page.has_next %}
             <li class="page-item">
-                <a class="page-link" href="?a_page={{ manual_inclusions_page.next_page_number }}#manual">Next</a>
+                <a class="page-link" href="?manual_page={{ manual_inclusions_page.next_page_number }}#manual">Next</a>
             </li>
             {% endif %}
             </ul>
         </nav>
     </section>
 
-    <!-- Auto Inclusions Section -->
-    <section class="mb-5" id="auto">
-        <h2 class="mb-4">Automatically Derived Inclusions (AutoInclusion) </h2>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Lower Class</th>
-                        <th>Upper Class</th>
-                        <th>Method</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for inc in auto_inclusions_page %}
-                    <tr>
-                        <td>{{ inc.lower.AB }}</td>
-                        <td>{{ inc.upper.AB }}</td>
-                        <td>{{ inc.method.NA }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-            <nav>
-      <ul class="pagination">
-        {% if auto_inclusions_page.has_previous %}
-          <li class="page-item">
-            <a class="page-link" href="?auto_page={{ auto_inclusions_page.previous_page_number }}#auto">Previous</a>
-          </li>
-        {% endif %}
-        <li class="page-item disabled">
-          <span class="page-link">Page {{ auto_inclusions_page.number }} of {{ auto_inclusions_page.paginator.num_pages }}</span>
-        </li>
-        {% if auto_inclusions_page.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="?auto_page={{ auto_inclusions_page.next_page_number }}#auto">Next</a>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
-    </section>
         <section class="mb-5" id="all_inc">
         <h2 class="mb-4">All Inclusions (Inclusion)</h2>
         <div class="table-responsive">
