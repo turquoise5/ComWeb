@@ -68,6 +68,14 @@ def inclusions_view(request):
         if inc.method and inc.method.AB == 'manual':
             inc.manual_justification = manual_just_map.get((inc.lower_id, inc.upper_id), '')
 
+    manual_refs_map = {
+        (m.lower_id, m.upper_id): list(m.references.all())
+        for m in ManualInclusion.objects.prefetch_related('references')
+    }
+    for inc in all_inclusions:
+        if inc.method and inc.method.AB == 'manual':
+            inc.manual_references = manual_refs_map.get((inc.lower_id, inc.upper_id), [])
+
     context = {
         'manual_inclusions_page': manual_paginator.get_page(manual_page_number),
         'all_inclusions_page': all_paginator.get_page(all_page_number),

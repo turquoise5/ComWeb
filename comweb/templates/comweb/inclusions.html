@@ -24,9 +24,11 @@
                         <td>{{ inc.upper.AB }}</td>
                         <td>{{ inc.justification }}</td>
                         <td>
-                            {% for ref in inc.references.all %}
-                                <div>{{ ref.doi }} ({{ ref.locator }})</div>
-                            {% endfor %}
+                            {% if inc.references.exists %}
+                                {% for ref in inc.references.all %}
+                                    {{ ref.locator }} of [<a href="{{ ref.doi }}" target="_blank">{{ ref.DE }}</a>]{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
@@ -71,11 +73,17 @@
                         <td>
                             {% if inc.method.AB == 'manual' %}
                                 manual: {{ inc.manual_justification }}
-                                {% if inc.references.exists %}; see {% for ref in inc.references.all %}Theorem {{ ref.locator }} of [{{ ref.doi }}]{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}
+                                {% if inc.manual_references %}
+                                    ; see
+                                    {% for ref in inc.manual_references %}
+                                        {{ ref.locator }} of [<a href="{{ ref.doi }}" target="_blank">{{ ref.DE }}</a>]{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                {% endif %}                            
+
                             {% elif inc.method.AB == 'trans' %}
-                                transitivity: {{ inc.row1.lower.AB }} ⊆ {{ inc.row1.upper.AB }} ⊆ {{ inc.row2.upper.AB }}
+                                transitivity: {{ inc.lower.AB }} ⊆ {{ inc.interm.AB }} ⊆ {{ inc.upper.AB }}
                             {% else %}
-                                auto: {{ inc.method.NA }} ({{ inc.method.DE }})
+                                auto: {{ inc.method.NA }} 
                             {% endif %}
                         </td>
                     </tr>
