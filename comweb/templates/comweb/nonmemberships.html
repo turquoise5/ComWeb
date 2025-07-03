@@ -1,0 +1,47 @@
+{% extends 'comweb/base.html' %}
+{% block title %}Non-Memberships{% endblock %}
+{% block content %}
+<h2>Manual Non-Memberships</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Problem</th>
+      <th>Class</th>
+      <th>References</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for m in manual_nonmemberships %}
+    <tr>
+      <td>{{ m.problem.NA }}</td>
+      <td>{{ m.com_class.AB }}</td>
+      <td>
+        {% for ref in m.references.all %}
+          ({{ ref.id }}, {{ ref.locator }}){% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>Non-Memberships</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Problem</th>
+      <th>Class</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for m in nonmemberships %}
+    <tr>
+      <td>{{ m.problem.NA }}</td>
+      <td>{{ m.com_class.AB }}</td>
+      <td>{{ m.method.NA }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

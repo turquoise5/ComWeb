@@ -87,7 +87,7 @@ class Method(models.Model):
 class MTG(models.Model):
     lower = models.ForeignKey(MachineType, on_delete=models.CASCADE, related_name='lower_machine_types')
     upper = models.ForeignKey(MachineType, on_delete=models.CASCADE, related_name='upper_machine_types')
-    method = models.CharField(max_length=100) # manually added or by transitive closure
+    method = models.CharField(max_length=500) # manually added or by transitive closure
     # if this is a transitive closure, then row1 and row2 will point to the MTG instances that were used to deduce this instance
     row1 = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='mtg_row1_set') 
     row2 = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='mtg_row2_set')
@@ -102,7 +102,7 @@ class ManualMTG(models.Model):
 class MMG(models.Model):
     lower = models.ForeignKey(MachineMode, on_delete=models.CASCADE, related_name='lower_machine_modes')
     upper = models.ForeignKey(MachineMode, on_delete=models.CASCADE, related_name='upper_machine_modes')
-    method = models.CharField(max_length=100) # manually added or by transitive closure
+    method = models.CharField(max_length=500) # manually added or by transitive closure
     row1 = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='mmg_row1_set')
     row2 = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='mmg_row2_set')
 
@@ -111,14 +111,13 @@ class ManualMMG(models.Model):
     upper = models.ForeignKey(MachineMode, on_delete=models.CASCADE, related_name='manual_upper_machine_modes')
     justification = models.CharField(max_length=500) # justification for why lower machine mode is a generalization of upper machine mode
 
-class AutoInclusion(models.Model):
-    lower = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='lower_classes')
-    upper = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='upper_classes')
-    method = models.ForeignKey(Method, on_delete=models.PROTECT, related_name='auto_inclusions')
-
 class Reference(models.Model):
+    # description
+    DE = models.CharField(max_length=200)
+    # DOI link to the publication, Google Books link or link to any online page that describes the publication
     doi = models.CharField(max_length=255)
-    locator = models.CharField(max_length=100)  # Page numbers, section numbers etc.
+    # Page numbers, section numbers etc. 
+    locator = models.CharField(max_length=100)  
 
     class Meta:
         unique_together = ['doi', 'locator']
@@ -167,20 +166,82 @@ class Inclusion(models.Model):
         blank=True,
         related_name='inclusions'
     )
-    row1 = models.ForeignKey(
-        "self", 
+    # intermediary class (which proves the inclusion by transitivity)
+    interm = models.ForeignKey(
+        Class, 
         null=True, 
         blank=True, 
         on_delete=models.SET_NULL,
-        related_name='inclusion_row1_set'
-    )
-    row2 = models.ForeignKey(
-        "self", 
-        null=True, 
-        blank=True, 
-        on_delete=models.SET_NULL,
-        related_name='inclusion_row2_set'
+        related_name='inclusion_interm'
     )
 
     def __str__(self):
         return f"{self.lower.AB} ⊆ {self.upper.AB} by {self.method.AB}"
+    
+class Problem(models.Model): 
+    NA = models.CharField(max_length=50)
+    AB = models.CharField(max_length=50)
+    TY = models.ForeignKey(ProblemType, on_delete=models.CASCADE)
+    DE = models.CharField(max_length=200)
+    co = models.BooleanField(default=False)
+
+class ManualMembership(models.Model): 
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    com_class = models.ForeignKey(Class, on_delete=models.CASCADE)
+    references = models.ManyToManyField(Reference)
+
+class Membership(models.Model): 
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    com_class = models.ForeignKey(Class, on_delete=models.CASCADE)
+    method = models.ForeignKey(Method, on_delete=models.CASCADE)
+    # in case of transitivity we store how it was derived, eg. SAT ∈ NP ⊆ PSPACE
+    row1 = models.ForeignKey(
+        'self', 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True, 
+        related_name="membership_row1_set")
+    row2 = models.ForeignKey(
+        Inclusion, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True, 
+        related_name="membership_row2_set")
+
+class ManualNonMembership(models.Model): 
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    com_class = models.ForeignKey(Class, on_delete=models.CASCADE)
+    references = models.ManyToManyField(Reference)
+
+class NonMembership(models.Model): 
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    com_class = models.ForeignKey(Class, on_delete=models.CASCADE)
+    method = models.ForeignKey(Method, on_delete=models.CASCADE)
+    # in case of transitivity we store how it was derived, eg. UNARY EQUALITY ∉ D-REGULAR ⊇ N-REGULAR
+    row1 = models.ForeignKey(
+        'self', 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True, 
+        related_name="nonmembership_row1_set")
+    row2 = models.ForeignKey(
+        'self', 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True, 
+        related_name="nonmembership_row2_set")
+
+# for non-inclusions which are justified by arguments which do not involve a witness problem
+class ManualNonInclusion(models.Model): 
+    # manual non inclusions are of the form e.g NP in P (i.e. Upper in Lower)
+    upper = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="not_manual_subset_of")
+    lower = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="not_manual_superset_of")
+    # quick reason why the inclusion holds (e.g., “time upper bounds space”)
+    justification = models.CharField(max_length=200)
+    references = models.ManyToManyField(Reference)
+
+class NonInclusion(models.Model): 
+    upper = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="not_subset_of")
+    lower = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="not_superset_of")
+    method = models.ForeignKey(Method, on_delete=models.CASCADE),
+

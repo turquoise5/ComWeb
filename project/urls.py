@@ -27,5 +27,9 @@ urlpatterns = [
     path('inclusions/', views.inclusions_view, name='inclusions'),
     path('mtg/', views.mtg_view, name='mtg'),
     path('mmg/', views.mmg_view, name='mmg'),
+    path('problems/', views.problems_view, name='problems'),
+    path('memberships/', views.memberships_view, name='memberships'),
+    path('nonmemberships/', views.nonmemberships_view, name='nonmemberships'),
+    path('noninclusions/', views.noninclusions_view, name='noninclusions'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

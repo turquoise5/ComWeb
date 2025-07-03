@@ -1,0 +1,61 @@
+{% extends 'comweb/base.html' %}
+
+{% block title %}Non-Inclusions{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Manual Non-Inclusions</h2>
+    <div class="table-responsive mb-5">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Upper Class</th>
+                    <th>Lower Class</th>
+                    <th>Justification</th>
+                    <th>References</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inc in manual_noninclusions %}
+                <tr>
+                    <td>{{ inc.upper.AB }}</td>
+                    <td>{{ inc.lower.AB }}</td>
+                    <td>{{ inc.justification }}</td>
+                    <td>
+                        {% for ref in inc.references.all %}
+                            ({{ ref.id }}, {{ ref.locator }}){% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center">No manual non-inclusions found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2 class="mb-4">Non-Inclusions</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Upper Class</th>
+                    <th>Lower Class</th>
+                    <th>Method</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inc in noninclusions %}
+                <tr>
+                    <td>{{ inc.upper.AB }}</td>
+                    <td>{{ inc.lower.AB }}</td>
+                    <td>{{ inc.method.NA }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3" class="text-center">No non-inclusions found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -104,6 +104,50 @@
             </div>
           </div>
         </div>
+
+        <!-- Problems Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Problems</h5>
+              <p class="card-text">Browse all computational problems.</p>
+              <a href="{% url 'problems' %}" class="btn btn-primary">View Problems</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Memberships Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Memberships</h5>
+              <p class="card-text">Manual and automatic problem-class memberships.</p>
+              <a href="{% url 'memberships' %}" class="btn btn-primary">View Memberships</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Non-Memberships Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Non-Memberships</h5>
+              <p class="card-text">Manual and automatic problem-class non-memberships.</p>
+              <a href="{% url 'nonmemberships' %}" class="btn btn-primary">View Non-Memberships</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Non-Inclusions Card -->
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Non-Inclusions</h5>
+              <p class="card-text">Manual and automatic non-inclusions between classes.</p>
+              <a href="{% url 'noninclusions' %}" class="btn btn-primary">View Non-Inclusions</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

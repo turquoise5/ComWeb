@@ -99,3 +99,32 @@ def mmg_view(request):
     ).all()
     context = {'mmgs': mmgs, "manual_mmgs": manual_mmgs}
     return render(request, "comweb/mmg.html", context)
+
+def problems_view(request):
+    problems = Problem.objects.select_related('TY').all().order_by('NA')
+    return render(request, "comweb/problems.html", {"problems": problems})
+
+
+def memberships_view(request):
+    manual_memberships = ManualMembership.objects.select_related('problem', 'com_class').prefetch_related('references').all()
+    memberships = Membership.objects.select_related('problem', 'com_class', 'method', 'row1', 'row2').all()
+    return render(request, "comweb/memberships.html", {
+        "manual_memberships": manual_memberships,
+        "memberships": memberships,
+    })
+
+def nonmemberships_view(request):
+    manual_nonmemberships = ManualNonMembership.objects.select_related('problem', 'com_class').prefetch_related('references').all()
+    nonmemberships = NonMembership.objects.select_related('problem', 'com_class', 'method', 'row1', 'row2').all()
+    return render(request, "comweb/nonmemberships.html", {
+        "manual_nonmemberships": manual_nonmemberships,
+        "nonmemberships": nonmemberships,
+    })
+
+def noninclusions_view(request):
+    manual_noninclusions = ManualNonInclusion.objects.select_related('upper', 'lower').prefetch_related('references').all()
+    noninclusions = NonInclusion.objects.select_related('upper', 'lower').all()
+    return render(request, "comweb/noninclusions.html", {
+        "manual_noninclusions": manual_noninclusions,
+        "noninclusions": noninclusions,
+    })
