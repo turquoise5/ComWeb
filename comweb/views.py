@@ -110,7 +110,14 @@ def mmg_view(request):
 
 def problems_view(request):
     problems = Problem.objects.select_related('TY').all().order_by('NA')
-    return render(request, "comweb/problems.html", {"problems": problems})
+    co_map = {p.id: p.co_problem for p in problems if not p.co}
+    ordered_problems =[]
+    for p in problems:
+        if not p.co: 
+            ordered_problems.append(p)
+            ordered_problems.append(co_map[p.id])
+
+    return render(request, "comweb/problems.html", {"problems": ordered_problems})
 
 
 def memberships_view(request):
