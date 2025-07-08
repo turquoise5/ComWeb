@@ -244,5 +244,21 @@ class ManualNonInclusion(models.Model):
 class NonInclusion(models.Model): 
     upper = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="not_subset_of")
     lower = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="not_superset_of")
-    method = models.ForeignKey(Method, on_delete=models.CASCADE),
-
+    # if we arrive at this non-inclusion via a witness problem, we store it here
+    witness_problem = models.ForeignKey(
+        Problem, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True, 
+        related_name="non_inclusion_witness_problem"
+    )
+    # if we arrive via transitivity through non-inclusion
+    # interm_class = models.ForeignKey(
+    #     Class, 
+    #     on_delete=models.CASCADE, 
+    #     null=True, 
+    #     blank=True, 
+    #     related_name="non_inclusion_interm"
+    # )
+    # A ⊄ B and B ⊇ C implies A ⊄ C
+    method = models.ForeignKey(Method, on_delete=models.CASCADE, null=True, blank=True, related_name='non_inclusions')
