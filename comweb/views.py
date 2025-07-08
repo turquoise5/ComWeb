@@ -147,7 +147,7 @@ def nonmemberships_view(request):
     manual_nonmemberships = ManualNonMembership.objects.select_related('problem', 'com_class').prefetch_related('references').all().order_by('id')
     nonmemberships = NonMembership.objects.select_related('problem', 'com_class', 'method', 'row1', 'row2').all().order_by('id')
 
-    manual_page_number = request.GET.get('manual_page', 1)
+    manual_page_number = request.GET.get('manusal_page', 1)
     all_page_number = request.GET.get('all_page', 1)
     manual_paginator = Paginator(manual_nonmemberships, 50)
     all_paginator = Paginator(nonmemberships, 50)
@@ -160,9 +160,32 @@ def nonmemberships_view(request):
     })
 
 def noninclusions_view(request):
-    manual_noninclusions = ManualNonInclusion.objects.select_related('upper', 'lower').prefetch_related('references').all()
-    noninclusions = NonInclusion.objects.select_related('upper', 'lower').all()
+    manual_noninclusions = ManualNonInclusion.objects.select_related('upper', 'lower').prefetch_related('references').all().order_by('id')
+    noninclusions = NonInclusion.objects.select_related('upper', 'lower', 'witness_problem').all().order_by('id')
+    # ADD PAGINATION
+    manual_page_number = request.GET.get('manual_page', 1)
+    all_page_number = request.GET.get('all_page', 1)
+    manual_paginator = Paginator(manual_noninclusions, 50)
+    all_paginator = Paginator(noninclusions, 50)
+    manual_noninclusions_page = manual_paginator.get_page(manual_page_number)
+    noninclusions_page = all_paginator.get_page(all_page_number)
+
+    # Add manual justifications and references to noninclusions
+    manual_just_map = {
+        (m.upper_id, m.lower_id): m.justification
+        for m in ManualNonInclusion.objects.all()
+    }
+    for ni in noninclusions:
+        if ni.method and ni.method.AB == 'manual':
+            ni.manual_justification = manual_just_map.get((ni.upper_id, ni.lower_id), '')
+    manual_refs_map = {
+        (m.upper_id, m.lower_id): list(m.references.all())
+        for m in ManualNonInclusion.objects.prefetch_related('references')
+    }
+    for ni in noninclusions:
+        ni.manual_references = manual_refs_map.get((ni.upper_id, ni.lower_id), [])
+    
     return render(request, "comweb/noninclusions.html", {
-        "manual_noninclusions": manual_noninclusions,
-        "noninclusions": noninclusions,
+        "manual_noninclusions": manual_noninclusions_page,
+        "noninclusions": noninclusions_page,
     })
