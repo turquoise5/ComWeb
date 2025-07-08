@@ -59,15 +59,14 @@ class Command(BaseCommand):
         
         problem_type_dict = {pt.NA: pt for pt in ProblemType.objects.all()}
         problems = get_problem_data(problem_type_dict)
-        populate_problems(problems)   
-        problem_dict = {p.AB: p for p in Problem.objects.all()}                
+        problem_dict = populate_problems(problems)   
         
         methods_dict = {m.AB: m for m in Method.objects.all()}
-        memberships = memberships_data.get_manual_memberships(problem_dict, classes_dict)
-        non_memberships = memberships_data.get_manual_non_memberships(problem_dict, classes_dict)
-        ManualMembership.objects.bulk_create([ManualMembership(**data) for data in memberships])
-        ManualNonMembership.objects.bulk_create([ManualNonMembership(**data) for data in non_memberships])
-        
+        manual_memberships = memberships_data.get_manual_memberships(problem_dict, classes_dict)
+        manual_non_memberships = memberships_data.get_manual_non_memberships(problem_dict, classes_dict)
+        ManualMembership.objects.bulk_create([ManualMembership(**data) for data in manual_memberships])
+        ManualNonMembership.objects.bulk_create([ManualNonMembership(**data) for data in manual_non_memberships])
+
         # do transitive closure of non/memberships
         memberships = populate_memberships(manual_memberships, methods_dict)
         non_memberships = populate_non_memberships(manual_non_memberships, methods_dict)
