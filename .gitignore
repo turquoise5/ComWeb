@@ -1,0 +1,8 @@
+config.ini
+venv
+__pycache__
+debug.log
+django-debug.log
+.env
+migrations/
+db.sqlite3
