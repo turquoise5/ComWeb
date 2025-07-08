@@ -85,13 +85,15 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),  
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),      
-        'HOST': os.getenv('DB_HOST'),  
-        'PORT': os.getenv('DB_PORT'),  # default PostgreSQL port
+        'NAME': "railway",  
+        'USER': "postgres",
+        'PASSWORD': "tLdXPiNiRKUyVxbGtGjekNoJcNaJTPZR",      
+        'HOST': "interchange.proxy.rlwy.net",  
+        'PORT': "33788",  
     }
 }
+
+# postgresql://postgres:tLdXPiNiRKUyVxbGtGjekNoJcNaJTPZR@postgres-o0t3.railway.internal:5432/railway
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
