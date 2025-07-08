@@ -184,6 +184,7 @@ class Problem(models.Model):
     TY = models.ForeignKey(ProblemType, on_delete=models.CASCADE)
     DE = models.CharField(max_length=200)
     co = models.BooleanField(default=False)
+    co_problem = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
 
 class ManualMembership(models.Model): 
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
