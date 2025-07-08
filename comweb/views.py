@@ -2,12 +2,76 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from comweb.models import *
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 # JANA ADD PAGINATION TO EVERY VIEW
 
 
 def home(request): 
     return render(request, "comweb/home.html")
+
+def class_search(request):
+    term = request.GET.get('q', '')
+    results = []
+
+    if term:
+        queryset = Class.objects.filter(Q(AB__icontains=term) | Q(NA__icontains=term)).order_by('AB')[:20]
+        results = [
+            {"id": c.id, "text": f"{c.AB} - {c.NA}"} for c in queryset
+        ]
+
+    return JsonResponse({"results": results})
+
+
+def query_inclusion_view(request):
+    classes = Class.objects.all().order_by('AB')
+    result_type = None  # "yes", "no", or "unspecified"
+    inc_obj = None
+    ni_obj = None
+
+    if request.method == "POST":
+        a_id = request.POST.get("class_a")
+        b_id = request.POST.get("class_b")
+
+        try:
+            a = Class.objects.get(id=a_id)
+            b = Class.objects.get(id=b_id)
+        except Class.DoesNotExist:
+            result_type = "invalid"
+        else:
+            if Inclusion.objects.filter(lower=a, upper=b).exists():
+                inc_obj = Inclusion.objects.select_related('method', 'lower', 'upper', 'interm').get(lower=a, upper=b)
+                all_inclusions = Inclusion.objects.select_related('lower', 'upper', 'method').order_by('id')
+                manual_just_map = {
+                (m.lower_id, m.upper_id): m.justification
+                    for m in ManualInclusion.objects.all()
+                }
+                for inc in all_inclusions:
+                    if inc.method and inc.method.AB == 'manual':
+                        inc.manual_justification = manual_just_map.get((inc.lower_id, inc.upper_id), '')
+
+                manual_refs_map = {
+                    (m.lower_id, m.upper_id): list(m.references.all())
+                    for m in ManualInclusion.objects.prefetch_related('references')
+                }
+                for inc in all_inclusions:
+                    if inc.method and inc.method.AB == 'manual':
+                        inc.manual_references = manual_refs_map.get((inc.lower_id, inc.upper_id), [])
+
+                result_type = "yes"
+            elif NonInclusion.objects.filter(upper=a, lower=b).exists():
+                ni_obj = NonInclusion.objects.select_related('method', 'upper', 'lower', 'witness_problem').get(upper=a, lower=b)
+                result_type = "no"
+            else:
+                result_type = "unspecified"
+
+    return render(request, "comweb/home.html", {
+        "classes": classes,
+        "result_type": result_type,
+        "inc": inc_obj,
+        "ni": ni_obj,
+    })
+
 
 def machine_info_view(request):
     types = MachineType.objects.all()
