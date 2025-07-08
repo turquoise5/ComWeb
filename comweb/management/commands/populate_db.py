@@ -9,6 +9,7 @@ from comweb.management.commands.utils.machine_populator import populate_machines
 from comweb.management.commands.utils.memberships_populator import populate_memberships, populate_non_memberships
 from comweb.management.commands.utils.mmg_populator import populate_mmg
 from comweb.management.commands.utils.mtg_populator import populate_mtg
+from comweb.management.commands.utils.non_inclusions_populator import populate_non_inclusions
 from comweb.management.commands.utils.problem_populator import populate_problems
 from comweb.models import *
 from comweb.management.commands.data.static_data import types_data, modes_data, problem_type_data, bounds_data, method_data
@@ -68,7 +69,8 @@ class Command(BaseCommand):
         ManualNonMembership.objects.bulk_create([ManualNonMembership(**data) for data in non_memberships])
         
         # do transitive closure of non/memberships
-        populate_memberships(memberships, methods_dict)
-        populate_non_memberships(non_memberships, methods_dict)
+        memberships = populate_memberships(manual_memberships, methods_dict)
+        non_memberships = populate_non_memberships(manual_non_memberships, methods_dict)
+        populate_non_inclusions()
 
         self.stdout.write(self.style.SUCCESS('Database populated successfully.'))
