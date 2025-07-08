@@ -76,7 +76,7 @@ method_data = [
                 "DE": "Proving inclusion by transitivity (e.g., if A ⊆ B and B ⊆ C, then A ⊆ C)."
             },
             {
-                "NA": "manual inclusion",
+                "NA": "manual",
                 "AB": "manual",
                 "SO": 5,
                 "DE": "Inclusion added manually (a theorem; see references)."
@@ -86,6 +86,12 @@ method_data = [
                 "AB": "comp", 
                 "SO": 6, 
                 "DE": "co-C is in C hence C is in co-C"
+            }, 
+            {
+                "NA": "witness",
+                "AB": "witness",
+                "SO": 7, 
+                "DE": "Witness problem non-inclusion"
             }
         ]
         
