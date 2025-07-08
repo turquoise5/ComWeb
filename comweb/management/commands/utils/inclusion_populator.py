@@ -1,5 +1,5 @@
 from django.db import connection
-from comweb.models import MMG, MTG, AutoInclusion, Class, Inclusion, ManualInclusion, Method
+from comweb.models import MMG, MTG, Class, Inclusion, ManualInclusion, Method
 
 def populate_methods(method_data):
     """Populate the Method table with predefined methods."""
@@ -58,13 +58,8 @@ def populate_inclusions(manual_inclusions):
                      mode_le and type_le and
                      time_bound_le and space_bound_le and alternations_bound_le)
 
-                if le: # ensure c1, c2 are not co-classes
-                    auto_inc = AutoInclusion.objects.get_or_create(
-                        lower=c1,
-                        upper=c2,
-                        method=get_method(c1, c2, mmg_pairs, mtg_pairs, methods)
-                    )[0]
-                    # Also create an Inclusion for each AutoInclusion
+                if le: 
+                    # create an Inclusion for each AutoInclusion
                     Inclusion.objects.get_or_create(
                         lower=c1,
                         upper=c2,
@@ -122,8 +117,7 @@ def populate_inclusions(manual_inclusions):
                         lower=idx_to_class[i],
                         upper=idx_to_class[j],
                         method=methods.get("trans"),
-                        row1=path[i][k],  # First inclusion used
-                        row2=path[k][j]   # Second inclusion used
+                        interm = idx_to_class[k]
                     )
                     path[i][j] = new_inclusion
     
