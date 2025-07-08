@@ -3,6 +3,9 @@ from django.http import HttpResponse, JsonResponse
 from comweb.models import *
 from django.core.paginator import Paginator
 
+# JANA ADD PAGINATION TO EVERY VIEW
+
+
 def home(request): 
     return render(request, "comweb/home.html")
 
@@ -109,9 +112,10 @@ def mmg_view(request):
     return render(request, "comweb/mmg.html", context)
 
 def problems_view(request):
-    problems = Problem.objects.select_related('TY').all().order_by('NA')
+    problems = Problem.objects.select_related('TY').all()
+    
     co_map = {p.id: p.co_problem for p in problems if not p.co}
-    ordered_problems =[]
+    ordered_problems = []
     for p in problems:
         if not p.co: 
             ordered_problems.append(p)
@@ -121,19 +125,38 @@ def problems_view(request):
 
 
 def memberships_view(request):
-    manual_memberships = ManualMembership.objects.select_related('problem', 'com_class').prefetch_related('references').all()
-    memberships = Membership.objects.select_related('problem', 'com_class', 'method', 'row1', 'row2').all()
+    manual_memberships = ManualMembership.objects.select_related('problem', 'com_class').prefetch_related('references').all().order_by('id')
+    memberships = Membership.objects.select_related('problem', 'com_class', 'method', 'row1', 'row2').all().order_by('id')
+    # ADD PAGINATION
+
+    manual_page_number = request.GET.get('manual_page', 1)
+    all_page_number = request.GET.get('all_page', 1)
+    manual_paginator = Paginator(manual_memberships, 50)
+    all_paginator = Paginator(memberships, 50)
+    manual_memberships_page = manual_paginator.get_page(manual_page_number)
+    memberships_page = all_paginator.get_page(all_page_number)
+    
+
     return render(request, "comweb/memberships.html", {
-        "manual_memberships": manual_memberships,
-        "memberships": memberships,
+        "manual_memberships": manual_memberships_page,
+        "memberships": memberships_page,
     })
 
 def nonmemberships_view(request):
-    manual_nonmemberships = ManualNonMembership.objects.select_related('problem', 'com_class').prefetch_related('references').all()
-    nonmemberships = NonMembership.objects.select_related('problem', 'com_class', 'method', 'row1', 'row2').all()
+    # add pagination
+    manual_nonmemberships = ManualNonMembership.objects.select_related('problem', 'com_class').prefetch_related('references').all().order_by('id')
+    nonmemberships = NonMembership.objects.select_related('problem', 'com_class', 'method', 'row1', 'row2').all().order_by('id')
+
+    manual_page_number = request.GET.get('manual_page', 1)
+    all_page_number = request.GET.get('all_page', 1)
+    manual_paginator = Paginator(manual_nonmemberships, 50)
+    all_paginator = Paginator(nonmemberships, 50)
+    manual_nonmemberships_page = manual_paginator.get_page(manual_page_number)
+    nonmemberships_page = all_paginator.get_page(all_page_number)
+
     return render(request, "comweb/nonmemberships.html", {
-        "manual_nonmemberships": manual_nonmemberships,
-        "nonmemberships": nonmemberships,
+        "manual_nonmemberships": manual_nonmemberships_page,
+        "nonmemberships": nonmemberships_page,
     })
 
 def noninclusions_view(request):
