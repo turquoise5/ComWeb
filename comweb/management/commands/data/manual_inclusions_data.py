@@ -25,7 +25,8 @@ def get_manual_inclusions(classes):
                 "upper": classes['D-REGULAR'],
                 "justification": "Every NFA can be converted to an equivalent DFA using the subset construction",
                 "references": Reference.objects.get_or_create(
-                    doi="",
+                    DE="Sipser's Book", 
+                    doi="https://dl.acm.org/doi/10.5555/524279",
                     locator="Theorem 1.39"
                 )
             },
@@ -34,7 +35,8 @@ def get_manual_inclusions(classes):
                 "upper": classes["D-CONTEXT-FREE"],
                 "justification": "Closed under complementation",
                 "references": Reference.objects.get_or_create(
-                    doi="",
+                    DE="Sipser's Book", 
+                    doi="https://dl.acm.org/doi/10.5555/524279",
                     locator="Theorem 2.42"
                 )
             }, 
@@ -43,7 +45,8 @@ def get_manual_inclusions(classes):
                 "upper": classes["DECIDABLE"],
                 "justification": "Every context-free language is decidable",
                 "references": Reference.objects.get_or_create(
-                    doi="",
+                    DE="Sipser's Book",
+                    doi="https://dl.acm.org/doi/10.5555/524279",
                     locator="Theorem 4.9"
                 )
             }, 
@@ -52,7 +55,8 @@ def get_manual_inclusions(classes):
                 "upper": classes["DECIDABLE"],
                 "justification": "Every context-free language is decidable",
                 "references": Reference.objects.get_or_create(
-                    doi="",
+                    DE="Sipser's Book", 
+                    doi="https://dl.acm.org/doi/10.5555/524279",
                     locator="Theorem 4.9"
                 )
             }, 
@@ -61,7 +65,8 @@ def get_manual_inclusions(classes):
                 "upper": classes["P"],
                 "justification": "Every context-free language is a member of P",
                 "references": Reference.objects.get_or_create(
-                    doi="",
+                    DE="Sipser's Book", 
+                    doi="https://dl.acm.org/doi/10.5555/524279",
                     locator="Theorem 7.16"
                 )
             },
@@ -70,7 +75,8 @@ def get_manual_inclusions(classes):
                 "upper": classes["P"],
                 "justification": "Every context-free language is a member of P",
                 "references": Reference.objects.get_or_create(
-                    doi="",
+                    DE="Sipser's Book", 
+                    doi="https://dl.acm.org/doi/10.5555/524279",
                     locator="Theorem 7.16"
                 )
             },
@@ -79,7 +85,8 @@ def get_manual_inclusions(classes):
                 "upper": classes["N-CONTEXT-FREE"],
                 "justification": "Every regular language is context-free",
                 "references": Reference.objects.get_or_create(
-                    doi="",
+                    DE="Sipser's Book", 
+                    doi="https://dl.acm.org/doi/10.5555/524279",
                     locator="Theorem 2.1"
                 )
             },
@@ -88,7 +95,8 @@ def get_manual_inclusions(classes):
                 "upper": classes["P"],
                 "justification": "PATH is NL-complete, and PATH is in P",
                 "references": Reference.objects.get_or_create(
-                    doi="",
+                    DE="Sipser's Book", 
+                    doi="https://dl.acm.org/doi/10.5555/524279",
                     locator="Corollary 8.26"
                 )
             }, 
@@ -117,7 +125,7 @@ def get_manual_inclusions(classes):
                 "upper": classes["PSPACE"],
                 "justification": "given an efficient co-verifier for a co-NP problem, we can build a DTM that simulates the co-verifier and uses polynomial space",
                 "references": Reference.objects.get_or_create(
-                    doi="",
+                    doi="", 
                     locator=""
                 )
             }, 
