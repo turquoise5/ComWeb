@@ -226,7 +226,7 @@ class NonMembership(models.Model):
         blank=True, 
         related_name="nonmembership_row1_set")
     row2 = models.ForeignKey(
-        'self', 
+        Inclusion, 
         on_delete=models.CASCADE, 
         null=True, 
         blank=True, 
