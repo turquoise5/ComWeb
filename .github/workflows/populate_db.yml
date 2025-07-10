@@ -25,6 +25,6 @@ jobs:
         run: |
           python manage.py migrate
 
-      - name: Run your custom management command
+      - name: Populate db
         run: |
           python manage.py populate_db
