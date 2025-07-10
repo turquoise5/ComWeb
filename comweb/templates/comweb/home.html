@@ -24,14 +24,14 @@
     <form id="class-query-form" method="POST" action="{% url 'query_inclusion' %}">
       {% csrf_token %}
       <div class="input-group mb-3">
-        <select name="class_a" id="class-a" class="form-control" required>
+        <select name="class_a" id="class_a" class="form-control" required>
           <option value="">Select Class A</option>
           {% for c in classes %}
             <option value="{{ c.id }}">{{ c.AB }}</option>
           {% endfor %}
         </select>
         <span class="input-group-text">⊆</span>
-        <select name="class_b" id="class-b" class="form-select" required>
+        <select name="class_b" id="class_b" class="form-select" required>
           <option value="">Select Class B</option>
           {% for c in classes %}
             <option value="{{ c.id }}">{{ c.AB }}</option>
@@ -41,51 +41,104 @@
       </div>
     </form>
 
-    {% if result_type == "yes" %}
-      <div class="alert alert-success">
-        YES — {{ inc.lower.AB }} ⊆ {{ inc.upper.AB }}<br>
-        {% if inc.method.AB == 'manual' %}
-          manual: {{ inc.manual_justification }}
-          {% if inc.manual_references.exists %}
+    {% if inclusion_result %}
+      {% if result_type == "yes" %}
+        <div class="alert alert-success">
+          YES — {{ inc.lower.AB }} ⊆ {{ inc.upper.AB }}<br>
+          {% if inc.method.AB == 'manual' %}
+            manual: {{ inc.manual_justification }}
+            {% if inc.manual_references.exists %}
+              ; see
+              {% for ref in inc.manual_references.all %}
+                {{ ref.locator }} of [<a href="{{ ref.doi }}" target="_blank">{{ ref.DE }}</a>]{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% elif inc.method.AB == 'trans' %}
+            transitivity: {{ inc.lower.AB }} ⊆ {{ inc.interm.AB }} ⊆ {{ inc.upper.AB }}
+          {% else %}
+            auto: {{ inc.method.NA }}
+          {% endif %}
+        </div>
+
+      {% elif result_type == "no" %}
+        <div class="alert alert-danger">
+          {{ result }}
+        </div>
+
+      {% elif result_type == "unspecified" %}
+        <div class="alert alert-warning">
+          UNSPECIFIED — No inclusion or non-inclusion found.
+        </div>
+      {% endif %}
+    {% endif %}
+
+  <h2 class="mt-5 mb-4">Problems vs Classes</h2>
+  <form id="membership-query-form" method="POST" action="{% url 'query_membership' %}">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+      <select name="problem" id="problem" class="form-control" required>
+        <option value="">Select Problem</option>
+        {% for p in problems %}
+          <option value="{{ p.id }}">{{ p.AB }} - {{ p.NA }}</option>
+        {% endfor %}
+      </select>
+      <span class="input-group-text">∈</span>
+      <select name="class" id="class" class="form-select" required>
+        <option value="">Select Class</option>
+        {% for c in classes %}
+          <option value="{{ c.id }}">{{ c.AB }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary">Query</button>
+    </div>
+  
+
+{% if membership_result %}
+  {% if result_type == "yes" %}
+    <div class="alert alert-success">
+      YES — {{ membership.problem.AB }} ∈ {{ membership.com_class.AB }}
+      {% if membership.method.AB == 'manual' %}
+        ; Manual: {{ membership.manual_justification }}
+        {% if membership.manual_references %}
+          ; see
+          {% for ref in membership.manual_references %}
+            {{ ref.locator }} of [<a href="{{ ref.doi }}" target="_blank">{{ ref.DE }}</a>]{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% elif membership.method.AB == 'trans' %}
+        ; Transitivity: {{ membership.row1.problem.AB }} ∈ {{ membership.row1.com_class.AB }} ⊆ {{ membership.row2.upper.AB }}
+      {% else %}
+        ; Auto: {{ membership.method.NA }}
+      {% endif %}
+    </div>
+  {% elif result_type == "no" %}
+    <div class="alert alert-danger">
+      NO — {{ membership.problem.AB }} ∉ {{ membership.com_class.AB }}
+    </div>
+  {% elif result_type == "unspecified" %}
+    <div class="alert alert-warning">
+      UNSPECIFIED — No membership or non-membership found.
+      {% if m %}
+        {% if m.method.AB == 'trans' %}
+          {{ m.method.NA }}: {{ m.row1.problem.AB }} ∉ {{ m.row1.com_class.AB }} ⊇ {{ m.row2.lower.AB }}
+        {% elif m.method.AB == 'manual' %}
+          {{ m.method.NA }}
+          {% if m.method.manual_references %}
             ; see
-            {% for ref in inc.manual_references.all %}
+            {% for ref in m.method.manual_references %}
               {{ ref.locator }} of [<a href="{{ ref.doi }}" target="_blank">{{ ref.DE }}</a>]{% if not forloop.last %}, {% endif %}
             {% endfor %}
           {% endif %}
-        {% elif inc.method.AB == 'trans' %}
-          transitivity: {{ inc.lower.AB }} ⊆ {{ inc.interm.AB }} ⊆ {{ inc.upper.AB }}
         {% else %}
-          auto: {{ inc.method.NA }}
+          {{ m.method.NA }}
         {% endif %}
-      </div>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endif %}
 
-    {% elif result_type == "no" %}
-      <div class="alert alert-danger">
-        NO — {{ ni.lower.AB }} ⊄ {{ ni.upper.AB }}<br>
-        {% if ni.method and ni.method.AB == 'witness' %}
-          {{ ni.method.NA }}: {{ ni.witness_problem.AB }} ∉ {{ ni.upper.AB }} but {{ ni.witness_problem.AB }} ∈ {{ ni.lower.AB }}
-        {% else %}
-          method: {{ ni.method.NA }}
-        {% endif %}
-      </div>
 
-    {% elif result_type == "unspecified" %}
-      <div class="alert alert-warning">
-        UNSPECIFIED — No inclusion or non-inclusion found.
-      </div>
-    {% endif %}
-
-    <h2 class="mt-5 mb-4">Problems vs Classes</h2>
-    <ul class="list-unstyled">
-      <li class="mb-3">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Problem">
-          <span class="input-group-text">∈</span>
-          <input type="text" class="form-control" placeholder="Class">
-          <button class="btn btn-primary">Query</button>
-        </div>
-      </li>
-    </ul>    <!-- Navigation Cards -->
+    <!-- Navigation Cards -->
     <div class="container mt-4">
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <!-- Machine Information Card -->
@@ -189,9 +242,58 @@
     </div>
   </div>
 </body>
+
 <script>
   $(document).ready(function () {
-    $('#class-a, #class-b').select2({
+    $('#problem').select2({
+      placeholder: "Search for a problem...",
+      allowClear: true,
+      ajax: {
+        url: "{% url 'problem_search' %}",
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+            q: params.term
+          };
+        },
+        processResults: function (data) {
+          return {
+            results: data.results
+          };
+        },
+        cache: true
+      },
+      minimumInputLength: 1
+    });
+
+    $('#class').select2({
+      placeholder: "Search for a class...",
+      allowClear: true,
+      ajax: {
+        url: "{% url 'class_search' %}",
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+            q: params.term
+          };
+        },
+        processResults: function (data) {
+          return {
+            results: data.results
+          };
+        },
+        cache: true
+      },
+      minimumInputLength: 1
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $('#class_a, #class_b').select2({
       placeholder: "Search for a class...",
       allowClear: true,
       ajax: {

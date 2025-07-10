@@ -10,6 +10,30 @@ from django.db.models import Q
 def home(request): 
     return render(request, "comweb/home.html")
 
+def find_witness_problems(a, b): 
+    """Find witness problems for non-inclusion between classes a and b."""
+    witness_problems = Problem.objects.filter(
+        memberships__com_class=a,
+        non_memberships__com_class=b
+    ).distinct()
+    return witness_problems
+
+def construct_non_inclusion_string(a, b, all_non_inclusions): 
+    ni_obj = NonInclusion.objects.select_related('method', 'not_superset', 'not_subset', 'interm').get(not_superset=a, not_subset=b)
+    if ni_obj.method == "witness":
+        witness_problems = find_witness_problems(ni_obj.not_superset, ni_obj.not_subset)
+        if witness_problems.exists():
+            return f"NO: {ni_obj.not_superset.AB} is not a subset of {ni_obj.not_subset.AB} (Witness Problem: {', '.join([wp.AB for wp in witness_problems])})"
+        else:
+            return f"NO: {ni_obj.not_superset.AB} is not a subset of {ni_obj.not_subset.AB} (Witness Problem: None)"
+    elif ni_obj.method.AB == "manual":
+        return f"NO: {ni_obj.not_superset.AB} is not a subset of {ni_obj.not_subset.AB} (Manual Justification: {ni_obj.manual_justification}; see {', '.join([f'#{ref.id}' for ref in ni_obj.manual_references])})"
+    elif ni_obj.method.AB == "trans": 
+        return f"NO: {ni_obj.not_superset.AB} is not a subset of {ni_obj.not_subset.AB} (Transitive Justification: {ni_obj.interm.AB})"
+    
+    return ""
+
+
 def class_search(request):
     term = request.GET.get('q', '')
     results = []
@@ -22,6 +46,16 @@ def class_search(request):
 
     return JsonResponse({"results": results})
 
+
+def problem_search(request):
+    term = request.GET.get('q', '')
+    results = []
+
+    if term:
+        problems = Problem.objects.filter(Q(AB__icontains=term) | Q(NA__icontains=term)).order_by('AB')[:20]
+        results = [{"id": p.id, "text": f"{p.AB} - {p.NA}"} for p in problems]
+
+    return JsonResponse({"results": results})
 
 def query_inclusion_view(request):
     classes = Class.objects.all().order_by('AB')
@@ -59,19 +93,74 @@ def query_inclusion_view(request):
                         inc.manual_references = manual_refs_map.get((inc.lower_id, inc.upper_id), [])
 
                 result_type = "yes"
-            elif NonInclusion.objects.filter(upper=a, lower=b).exists():
-                ni_obj = NonInclusion.objects.select_related('method', 'upper', 'lower', 'witness_problem').get(upper=a, lower=b)
+            elif NonInclusion.objects.filter(not_superset=a, not_subset=b).exists():
+                all_non_inclusions = NonInclusion.objects.select_related(
+                    'not_superset', 'not_subset', 'method', 'interm'
+                ).order_by('id')
+                manual_just_map = {
+                    (m.upper_id, m.lower_id): m.justification
+                    for m in ManualNonInclusion.objects.all()
+                }
+                for non_inc in all_non_inclusions:
+                    if non_inc.method and non_inc.method.AB == 'manual':
+                        non_inc.manual_justification = manual_just_map.get((non_inc.lower_id, non_inc.upper_id), '')
+
+                manual_refs_map = {
+                    (m.upper_id, m.lower_id): list(m.references.all())
+                    for m in ManualNonInclusion.objects.prefetch_related('references')
+                }
+
+                for non_inc in all_non_inclusions:
+                    if non_inc.method and non_inc.method.AB == 'manual':
+                        non_inc.manual_references = manual_refs_map.get((non_inc.lower_id, non_inc.upper_id), [])
+
                 result_type = "no"
+                result = construct_non_inclusion_string(a, b, all_non_inclusions)
             else:
                 result_type = "unspecified"
 
     return render(request, "comweb/home.html", {
+        "inclusion_result": True,
         "classes": classes,
         "result_type": result_type,
         "inc": inc_obj,
         "ni": ni_obj,
+        "result": result if 'result' in locals() else None
     })
 
+
+def query_membership(request):
+    classes = Class.objects.all().order_by('AB')
+    result_type = None  # "yes", "no", or "unspecified"
+    membership_obj = None
+
+    if request.method == "POST":
+        problem_id = request.POST.get("problem")
+        class_id = request.POST.get("class")
+
+        try:
+            problem = Problem.objects.get(id=problem_id)
+            com_class = Class.objects.get(id=class_id)
+        except (Problem.DoesNotExist, Class.DoesNotExist):  
+            result_type = "invalid"
+        else:
+            if Membership.objects.filter(problem=problem, com_class=com_class).exists():
+                membership_obj = Membership.objects.select_related(
+                    'problem', 'com_class', 'method', 'row1', 'row2'
+                ).get(problem=problem, com_class=com_class)
+                result_type = "yes"
+            elif NonMembership.objects.filter(problem=problem, com_class=com_class).exists():
+                result_type = "no"
+            else:
+                result_type = "unspecified"
+        
+    return render(request, "comweb/home.html", {
+        "membership_result": True,
+        "classes": classes,
+        "result_type": result_type,
+        "membership": membership_obj,
+        "problems": Problem.objects.all().order_by('AB')
+    })
 
 def machine_info_view(request):
     types = MachineType.objects.all()
@@ -225,8 +314,8 @@ def nonmemberships_view(request):
 
 def noninclusions_view(request):
     manual_noninclusions = ManualNonInclusion.objects.select_related('upper', 'lower').prefetch_related('references').all().order_by('id')
-    noninclusions = NonInclusion.objects.select_related('upper', 'lower', 'witness_problem').all().order_by('id')
-    # ADD PAGINATION
+    noninclusions = NonInclusion.objects.select_related('not_superset', 'not_subset', 'interm').all().order_by('id')
+    # PAGINATION
     manual_page_number = request.GET.get('manual_page', 1)
     all_page_number = request.GET.get('all_page', 1)
     manual_paginator = Paginator(manual_noninclusions, 50)
@@ -236,19 +325,19 @@ def noninclusions_view(request):
 
     # Add manual justifications and references to noninclusions
     manual_just_map = {
-        (m.upper_id, m.lower_id): m.justification
+        (m.not_superset_id, m.not_subset_id): m.justification
         for m in ManualNonInclusion.objects.all()
     }
     for ni in noninclusions:
         if ni.method and ni.method.AB == 'manual':
-            ni.manual_justification = manual_just_map.get((ni.upper_id, ni.lower_id), '')
+            ni.manual_justification = manual_just_map.get((ni.not_superset_id, ni.not_subset_id), '')
     manual_refs_map = {
-        (m.upper_id, m.lower_id): list(m.references.all())
+        (m.not_superset_id, m.not_subset_id): list(m.references.all())
         for m in ManualNonInclusion.objects.prefetch_related('references')
     }
     for ni in noninclusions:
-        ni.manual_references = manual_refs_map.get((ni.upper_id, ni.lower_id), [])
-    
+        ni.manual_references = manual_refs_map.get((ni.not_superset_id, ni.not_subset_id), [])
+
     return render(request, "comweb/noninclusions.html", {
         "manual_noninclusions": manual_noninclusions_page,
         "noninclusions": noninclusions_page,
