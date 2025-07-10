@@ -23,6 +23,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('query-inclusion/', views.query_inclusion_view, name='query_inclusion'),
+    path('query-membership/', views.query_membership, name='query_membership'),
+    path('search/class/', views.class_search, name='class_search'),
+    path('search/problem/', views.problem_search, name='problem_search'),
     path("ajax/class-search/", views.class_search, name="class_search"),
     path('', views.home, name="home"),    path('machine-info/', views.machine_info_view, name='machine_info'),
     path('complexity-info/', views.complexity_info_view, name='complexity_info'),
