@@ -23,6 +23,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      
+      - name: Print DB host for verification
+        run: |
+          python -c "import django; django.setup(); from django.conf import settings; print('🔎 DB HOST =', settings.DATABASES['default']['HOST'])"
+
 
       - name: Set up Django (env vars, DB, etc.)
         run: |
