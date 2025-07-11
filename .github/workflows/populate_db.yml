@@ -4,7 +4,7 @@ on:
   workflow_dispatch:  # Trigger manually from GitHub UI
 
 env:
-  DJANGO_SETTINGS_MODULE: comweb.settings
+  DJANGO_SETTINGS_MODULE: project.settings
 
 jobs:
   run-command:
