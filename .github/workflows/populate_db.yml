@@ -3,6 +3,9 @@ name: Populate Database
 on:
   workflow_dispatch:  # Trigger manually from GitHub UI
 
+env:
+  DJANGO_SETTINGS_MODULE: comweb.settings
+
 jobs:
   run-command:
     runs-on: ubuntu-latest
