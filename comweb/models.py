@@ -116,14 +116,19 @@ class Reference(models.Model):
     DE = models.CharField(max_length=200)
     # DOI link to the publication, Google Books link or link to any online page that describes the publication
     doi = models.CharField(max_length=255)
-    # Page numbers, section numbers etc. 
-    locator = models.CharField(max_length=100)  
-
-    class Meta:
-        unique_together = ['doi', 'locator']
+    locator = models.CharField(max_length=200)
 
     def __str__(self):
         return f"{self.doi} ({self.locator})"
+    
+# class ReferenceUse(models.Model):
+#     reference = models.ForeignKey(Reference, on_delete=models.CASCADE)
+#     locator = models.CharField(max_length=100)
+
+#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+#     object_id = models.PositiveIntegerField()
+#     content_object = GenericForeignKey('content_type', 'object_id')
+
 
 class ManualInclusion(models.Model):
     lower = models.ForeignKey(
@@ -192,7 +197,7 @@ class ManualMembership(models.Model):
     references = models.ManyToManyField(Reference)
 
 class Membership(models.Model): 
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name='memberships')
     com_class = models.ForeignKey(Class, on_delete=models.CASCADE)
     method = models.ForeignKey(Method, on_delete=models.CASCADE)
     # in case of transitivity we store how it was derived, eg. SAT ∈ NP ⊆ PSPACE
@@ -215,7 +220,7 @@ class ManualNonMembership(models.Model):
     references = models.ManyToManyField(Reference)
 
 class NonMembership(models.Model): 
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name='non_memberships')
     com_class = models.ForeignKey(Class, on_delete=models.CASCADE)
     method = models.ForeignKey(Method, on_delete=models.CASCADE)
     # in case of transitivity we store how it was derived, eg. UNARY EQUALITY ∉ D-REGULAR ⊇ N-REGULAR
@@ -242,23 +247,21 @@ class ManualNonInclusion(models.Model):
     references = models.ManyToManyField(Reference)
 
 class NonInclusion(models.Model): 
-    upper = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="not_subset_of")
-    lower = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="not_superset_of")
+    not_superset = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="not_subset_of")
+    not_subset = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="not_superset_of")
     # if we arrive at this non-inclusion via a witness problem, we store it here
-    witness_problem = models.ForeignKey(
-        Problem, 
-        on_delete=models.CASCADE, 
-        null=True, 
-        blank=True, 
-        related_name="non_inclusion_witness_problem"
-    )
-    # if we arrive via transitivity through non-inclusion
-    # interm_class = models.ForeignKey(
-    #     Class, 
+    # witness_problem = models.ForeignKey(
+    #     Problem, 
     #     on_delete=models.CASCADE, 
     #     null=True, 
     #     blank=True, 
-    #     related_name="non_inclusion_interm"
+    #     related_name="non_inclusion_witness_problem"
     # )
-    # A ⊄ B and B ⊇ C implies A ⊄ C
     method = models.ForeignKey(Method, on_delete=models.CASCADE, null=True, blank=True, related_name='non_inclusions')
+    interm = models.ForeignKey(
+        Class,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='non_inclusion_interm'
+    )
