@@ -76,7 +76,6 @@ def populate_non_memberships(manual_non_membership, methods):
     for inc in inclusion:
         try:
             reverse_inclusion_map[inc.upper.AB].add(inc.lower)
-            stdout.write(f"Adding inclusion ({inc.upper.AB}, {inc.lower.AB}) to map.\n")
         except Inclusion.DoesNotExist:
             stdout.write(f"Warning: Inclusion not found for ({inc.lower}, {inc.upper}). Skipping.\n")
             continue
