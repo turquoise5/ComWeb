@@ -7,8 +7,8 @@ The `Method` table stores metadata about how a given fact (e.g., an inclusion, m
 | Field | Type                        | Description                                                     |
 | ----- | --------------------------- | --------------------------------------------------------------- |
 | `id`  | `id`                 | Auto-generated unique identifier.                               |
-| `NA`  | `string` | Full name of the method (e.g., "Manual", "Transitive Closure"). |
-| `AB`  | `string` | Abbreviation or symbolic tag (e.g., `MAN`, `TRANS`).            |
+| `NA`  | `string` | Full name of the method (e.g., "Manual", "Transitivity"). |
+| `AB`  | `string` | Abbreviation             |
 | `SO`  | `int`              | Sort order used for display and query organization.             |
 | `DE`  | `string` | A brief textual description of the method.                      |
 
