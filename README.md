@@ -74,7 +74,7 @@ pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 python manage.py populate_db
-
+```
 ### Remote (via GitHub Actions)
 
 1. Go to the **Actions** tab in this GitHub repo.
