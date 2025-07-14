@@ -54,5 +54,5 @@ Combines a machine mode and type into a specific machine entity used to define c
 ## Related Tables
 
 * [`Class`](class.md): references `Machine` to define complexity classes.
-* [`MTG`](mtg.md), [`ManualMTG`](manualmtg.md): define generalization relationships between `MachineType` entries.
-* [`MMG`](mmg.md), [`ManualMMG`](manualmmg.md): define generalization relationships between `MachineMode` entries.
+* [`MTG` & `ManualMTG`](machine_generalizations.md): define generalization relationships between `MachineType` entries.
+* [`MMG` & `ManualMMG`](machine_generalizations.md): define generalization relationships between `MachineMode` entries.
