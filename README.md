@@ -25,27 +25,6 @@
 ---
 
 ## Database
-
-The core of ComWeb is its **relational schema**, implemented in `comweb/models.py`. Key entities include:
-
-- `Class`: Represents a complexity class (e.g., NP, PSPACE).
-- `Problem`: Represents a decision or computational problem (e.g., SAT).
-- `Inclusion`, `NonInclusion`: Track inclusion and separation between classes.
-- `Membership`, `NonMembership`: Represent whether a problem belongs to a class.
-- `Machine`, `MachineType`, `MachineMode`: Represent computational models of a machine (Machine is defined by its type (e.g Turing Mschine) and mode (e.g. Determinstic).
-- `ResourceBound`: Time/space/alternations bounds (e.g., linear, polynomial).
-- `Reference`: Stores citations supporting any of the above relationships.
-
-### Relationships Example
-
-A `Class` is defined by:
-- A `ProblemType` (e.g. language, function, search),
-- A `Machine` (itself defined by its `Mode` and `Type`),
-- Resource bounds (time, space, alternations),
-- Co flag which describes if it's a co class (eg. co-NP).
-
----
-
 > Below is an explaination of tables and how they're populated. If you're contributing to ComWeb or reviewing how facts are inferred, this documentation is the best place to start.
 
 ### Table Descriptions
