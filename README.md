@@ -32,14 +32,14 @@ The core of ComWeb is its **relational schema**, implemented in `comweb/models.p
 - `Problem`: Represents a decision or computational problem (e.g., SAT).
 - `Inclusion`, `NonInclusion`: Track inclusion and separation between classes.
 - `Membership`, `NonMembership`: Represent whether a problem belongs to a class.
-- `Machine`, `MachineType`, `MachineMode`: Represent computational models.
-- `ResourceBound`: Time/space bounds (e.g., linear, polynomial).
+- `Machine`, `MachineType`, `MachineMode`: Represent computational models of a machine (Machine is defined by its type (e.g Turing Mschine) and mode (e.g. Determinstic).
+- `ResourceBound`: Time/space/alternations bounds (e.g., linear, polynomial).
 - `Reference`: Stores citations supporting any of the above relationships.
 
 ### Relationships Example
 
 A `Class` is defined by:
-- A `ProblemType` (e.g. language, function, promise),
+- A `ProblemType` (e.g. language, function, search),
 - A `Machine` (itself defined by its `Mode` and `Type`),
 - Resource bounds (time, space, alternations),
 - Co flag which describes if it's a co class (eg. co-NP).
@@ -59,7 +59,7 @@ A `Class` is defined by:
 | `Inclusion`, `NonInclusion` | Facts about class relationships |
 | `Membership`, `NonMembership` | Facts about whether a problem is in a class |
 | `Reference` | Source material that supports any of the above |
-| `Method` | Describes how a fact was derived (manual or transitive) |
+| `Method` | Describes how a fact was derived (eg. manual, transitive) |
 
 ---
 
@@ -84,9 +84,9 @@ python manage.py populate_db
 
 ### Data Sources and Flow
 
-- Manual data: Stored in `/data`
-- Population logic: `/management/commands/utils/`
-- Orchestration script: `populate_db.py`
+- Manual data: Stored in `comweb/management/commands/data`
+- Population logic: `comweb/management/commands/utils/`
+- Population script: `comweb/management/commands/populate_db.py`
 
 Some tables must be populated in a specific order (e.g., MachineModes before Machines).
 
