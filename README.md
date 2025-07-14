@@ -108,9 +108,9 @@ The frontend is built using Django templates and views:
 - **Routes**: `urls.py`
 
 It allows users to:
-- Search for class inclusions or non-inclusions
-- Explore problem memberships
-- Navigate generalizations between machine types/modes
+- Query for class inclusions or non-inclusions
+- Query for problem memberships
+- View different tables 
 
 ---
 
