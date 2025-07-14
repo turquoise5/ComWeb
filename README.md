@@ -46,22 +46,50 @@ A `Class` is defined by:
 
 ---
 
+> Below is an explaination of tables and how they're populated. If you're contributing to ComWeb or reviewing how facts are inferred, this documentation is the best place to start.
+
 ### Table Descriptions
 
-> Each model includes fields like name (`NA`), abbreviation (`AB`), sort order (`SO`), and various foreign keys.
+Below is a list of core database tables used in ComWeb. Each links to a detailed explanation of its schema and population logic, found in the `docs/` directory.
 
-| Table | Description |
-|-------|-------------|
-| `MachineType`, `MachineMode` | Categories like TM/DFA or deterministic/non-deterministic |
-| `Machine` | Specific combinations of type and mode |
-| `Class` | A complexity class, built from a machine and resource bounds |
-| `Problem` | A computational problem |
-| `Inclusion`, `NonInclusion` | Facts about class relationships |
-| `Membership`, `NonMembership` | Facts about whether a problem is in a class |
-| `Reference` | Source material that supports any of the above |
-| `Method` | Describes how a fact was derived (eg. manual, transitive) |
+| Table                                  | Description                                                                                      | Docs                                              |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| `MachineMode`                          | Represents modes of computation (e.g. deterministic, nondeterministic). Used to define machines. | [docs/machine\_mode.md](docs/machine_mode.md)     |
+| `MachineType`                          | Represents types of abstract machines (e.g. Turing Machine, DFA). Used to define machines.       | [docs/machine\_type.md](docs/machine_type.md)     |
+| `Machine`                              | A combination of `MachineType` and `MachineMode`. Used to define complexity classes.             | [docs/machine.md](docs/machine.md)                |
+| `ProblemType`                          | High-level category for problems (e.g., language, promise problem). Used to define classes.      | [docs/problem\_type.md](docs/problem_type.md)     |
+| `ResourceBound`                        | Describes computational resource limits (e.g. polynomial time). Used to parameterize classes.    | [docs/resource\_bound.md](docs/resource_bound.md) |
+| `Class`                                | Represents a complexity class defined by machine, problem type, and resource bounds.             | [docs/class.md](docs/class.md)                    |
+| `Method`                               | Describes how a fact (e.g., inclusion) was derived — manually, by transitivity, etc.             | [docs/method.md](docs/method.md)                  |
+| `MTG`, `ManualMTG`                     | Generalization relations between machine types. Used to derive machine inclusions.               | [docs/mtg.md](docs/mtg.md)                        |
+| `MMG`, `ManualMMG`                     | Generalization relations between machine modes. Used to derive machine inclusions.               | [docs/mmg.md](docs/mmg.md)                        |
+| `Reference`                            | Bibliographic sources (e.g., papers, books) with locator fields. Cited in factual assertions.    | [docs/reference.md](docs/reference.md)            |
+| `Inclusion`, `ManualInclusion`         | Asserts that one complexity class is included in another, manually or via closure.               | [docs/inclusion.md](docs/inclusion.md)            |
+| `NonInclusion`, `ManualNonInclusion`   | Asserts a separation between two classes, with or without witness problems.                      | [docs/noninclusion.md](docs/noninclusion.md)      |
+| `Problem`                              | Represents decision/computational problems. May have co-problems (e.g., SAT and UNSAT).          | [docs/problem.md](docs/problem.md)                |
+| `Membership`, `ManualMembership`       | Asserts that a problem is in a class (derived or cited).                                         | [docs/membership.md](docs/membership.md)          |
+| `NonMembership`, `ManualNonMembership` | Asserts that a problem is *not* in a class.                                                      | [docs/nonmembership.md](docs/nonmembership.md)    |
 
 ---
+
+### Table Generation Logic
+
+Each database table in ComWeb is populated according to specific logic—sometimes manually, sometimes computed via transitive closure, reference chains, or intermediate derivations.
+
+To better understand how each table is populated and interconnected, refer to the logic files in the [`docs/`](docs/) directory:
+
+| Table                                     | Logic Description                                                      | Logic Docs                                                      |
+| ----------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `MachineMode` / `MachineType` / `Machine` | Populated from manual CSVs, required for class generation.             | [docs/logic\_machines.md](docs/logic_machines.md)               |
+| `ProblemType` / `ResourceBound`           | Loaded from static lists to define foundational schema.                | [docs/logic\_static.md](docs/logic_static.md)                   |
+| `Class`                                   | Created from cross-product of machine + problem type + bounds.         | [docs/logic\_class.md](docs/logic_class.md)                     |
+| `Reference` / `Method`                    | Parsed manually from citation CSVs.                                    | [docs/logic\_references.md](docs/logic_references.md)           |
+| `Inclusion` / `ManualInclusion`           | Populated manually and extended using transitive closure.              | [docs/logic\_inclusions.md](docs/logic_inclusions.md)           |
+| `NonInclusion` / `ManualNonInclusion`     | Loaded from manual assertions with logic for witness and transitivity. | [docs/logic\_noninclusions.md](docs/logic_noninclusions.md)     |
+| `Membership` / `ManualMembership`         | Derived via direct citation or transitive inclusion of problems.       | [docs/logic\_memberships.md](docs/logic_memberships.md)         |
+| `NonMembership` / `ManualNonMembership`   | Similar to Membership logic, but for exclusion.                        | [docs/logic\_nonmemberships.md](docs/logic_nonmemberships.md)   |
+| `MTG` / `MMG`                             | Constructed from Manual entries + inferred via closure.                | [docs/logic\_generalizations.md](docs/logic_generalizations.md) |
+
 
 ## Populating the Database
 
@@ -89,27 +117,6 @@ python manage.py populate_db
 - Population script: `comweb/management/commands/populate_db.py`
 
 Some tables must be populated in a specific order (e.g., MachineModes before Machines).
-
----
-
-### Table Generation Logic
-
-Each database table in ComWeb is populated according to specific logic—sometimes manual, sometimes computed via transitive closure or dependency chains.
-
-To better understand how each table is populated and interconnected, we provide detailed explanations for each in the [`docs/`](docs/) directory. These include:
-
-| Table | Logic Description |
-|-------|--------------------|
-| `Class` | [docs/class.md](docs/class.md): How classes are constructed from machines, problem types, and resource bounds. |
-| `Machine`, `MachineType`, `MachineMode` | [docs/machines.md](docs/machines.md): How machine types/modes combine to form valid machines. |
-| `Inclusion`, `NonInclusion` | [docs/inclusions.md](docs/inclusions.md): Manual entries and how transitive closure is applied to derive new relationships. |
-| `Membership`, `NonMembership` | [docs/memberships.md](docs/memberships.md): How memberships are derived via inclusions and problem mappings. |
-| `MTG`, `MMG` | [docs/generalizations.md](docs/generalizations.md): How generalizations between machine types/modes are constructed and reasoned about. |
-| `Reference`, `Method` | [docs/references.md](docs/references.md): How sources and derivation methods are tracked and linked to facts. |
-
-> These files explain **data dependencies**, **justification structures**, and any **intermediate steps** (like `row1`/`row2` transitive links) needed to understand how facts are generated and stored.
-
-If you're contributing to ComWeb or reviewing how facts are inferred, this documentation is the best place to start.
 
 ---
 
