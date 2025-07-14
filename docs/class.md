@@ -45,3 +45,31 @@ It is also used to define other tables like:
 * [Manual Inclusion & Inclusion](inclusion.md)
 * [Manual NonInclusion & NonInclusion](non_inclusion.md)
 
+# `ResourceBound` Table
+
+Defines the quantitative limits on computational resources used to define complexity classes.
+
+## Fields
+
+| Field   | Type                        | Description                                             |
+| ------- | --------------------------- | ------------------------------------------------------- |
+| `id`    | `int`                 | Auto-generated ID.                                      |
+| `NA`    | `string` | Full name of the bound (e.g., polynomial, exponential). |
+| `AB`    | `string` | Abbreviation (e.g., `poly`, `exp`, `inf`).              |
+| `SO`    | `int`              | Sort order for display.                                 |
+| `order` | `int`              | Logical ordering relative to other bounds.              |
+
+## Notes
+
+* Used in defining `time_bound`, `space_bound`, and `alternations_bound` for classes.
+
+## Example
+
+```json
+{
+  "NA": "Polynomial",
+  "AB": "poly",
+  "SO": 1,
+  "order": 1
+}
+```
