@@ -92,6 +92,27 @@ Some tables must be populated in a specific order (e.g., MachineModes before Mac
 
 ---
 
+### Table Generation Logic
+
+Each database table in ComWeb is populated according to specific logic—sometimes manual, sometimes computed via transitive closure or dependency chains.
+
+To better understand how each table is populated and interconnected, we provide detailed explanations for each in the [`docs/`](docs/) directory. These include:
+
+| Table | Logic Description |
+|-------|--------------------|
+| `Class` | [docs/class.md](docs/class.md): How classes are constructed from machines, problem types, and resource bounds. |
+| `Machine`, `MachineType`, `MachineMode` | [docs/machines.md](docs/machines.md): How machine types/modes combine to form valid machines. |
+| `Inclusion`, `NonInclusion` | [docs/inclusions.md](docs/inclusions.md): Manual entries and how transitive closure is applied to derive new relationships. |
+| `Membership`, `NonMembership` | [docs/memberships.md](docs/memberships.md): How memberships are derived via inclusions and problem mappings. |
+| `MTG`, `MMG` | [docs/generalizations.md](docs/generalizations.md): How generalizations between machine types/modes are constructed and reasoned about. |
+| `Reference`, `Method` | [docs/references.md](docs/references.md): How sources and derivation methods are tracked and linked to facts. |
+
+> These files explain **data dependencies**, **justification structures**, and any **intermediate steps** (like `row1`/`row2` transitive links) needed to understand how facts are generated and stored.
+
+If you're contributing to ComWeb or reviewing how facts are inferred, this documentation is the best place to start.
+
+---
+
 ## Frontend
 
 The frontend is built using Django templates and views:
