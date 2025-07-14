@@ -33,3 +33,30 @@ The `Problem` table represents computational problems that are either members or
   "co_problem": co-SAT
 }
 ```
+
+# `ProblemType` Table
+
+Defines the nature of problems (e.g., decision, function, promise).
+
+## Fields
+
+| Field   | Type                        | Description                                        |
+| ------- | --------------------------- | -------------------------------------------------- |
+| `id`    | `int`                 | Auto-generated ID.                                 |
+| `NA`    | `string` | Name of the problem type (e.g., Decision Problem). |
+| `SO`    | `int`              | Sort order for displaying.                         |
+| `order` | `int`              | Relative logical or structural ordering.           |
+
+## Notes
+
+* Referenced by the [`Problem`](#problem-table) table and [`Class`](class.md).
+
+## Example
+
+```json
+{
+  "NA": "Decision Problem",
+  "SO": 1,
+  "order": 1
+}
+```
