@@ -1,8 +1,14 @@
-# `Problem` Table
+# Problem-Related Tables
+
+This document describes the schema and purpose of the tables related to problem representation in the ComWeb database. The tables are `Problem` and `ProblemType`.
+
+---
+
+## `Problem` Table
 
 The `Problem` table represents computational problems that are either members or non-members of complexity classes. Each problem has a (co-) problem.
 
-## Fields
+### Fields
 
 | Field        | Type                        | Description                                                                |
 | ------------ | --------------------------- | -------------------------------------------------------------------------- |
@@ -14,7 +20,7 @@ The `Problem` table represents computational problems that are either members or
 | `co`         | `boolean`              | Indicates whether this is a co-problem.                                    |
 | `co_problem` | `Problem id`        | Links to the (co-) problem. |
 
-## Related Tables
+### Related Tables
 * [`ProblemType`](problem_type.md)
 
 `Problem` is used to define: 
@@ -34,11 +40,11 @@ The `Problem` table represents computational problems that are either members or
 }
 ```
 
-# `ProblemType` Table
+## `ProblemType` Table
 
 Defines the nature of problems (e.g., decision, function, promise).
 
-## Fields
+### Fields
 
 | Field   | Type                        | Description                                        |
 | ------- | --------------------------- | -------------------------------------------------- |
@@ -47,11 +53,11 @@ Defines the nature of problems (e.g., decision, function, promise).
 | `SO`    | `int`              | Sort order for displaying.                         |
 | `order` | `int`              | Relative logical or structural ordering.           |
 
-## Notes
+### Notes
 
 * Referenced by the [`Problem`](#problem-table) table and [`Class`](class.md).
 
-## Example
+### Example
 
 ```json
 {
