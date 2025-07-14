@@ -4,8 +4,6 @@ This document describes the schema and purpose of the tables related to class re
 
 ---
 
-  ---------------------
-
 ## `ResourceBound` Table
 
 Defines the quantitative limits on computational resources used to define complexity classes.
