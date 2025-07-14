@@ -1,8 +1,47 @@
-# `Class` Table
+# Class-Related Tables
+
+This document describes the schema and purpose of the tables related to class representation in the ComWeb database, i.e `Class` and `ResourceBound`.
+
+---
+
+  ---------------------
+
+## `ResourceBound` Table
+
+Defines the quantitative limits on computational resources used to define complexity classes.
+
+### Fields
+
+| Field   | Type                        | Description                                             |
+| ------- | --------------------------- | ------------------------------------------------------- |
+| `id`    | `int`                 | Auto-generated ID.                                      |
+| `NA`    | `string` | Full name of the bound (e.g., polynomial, exponential). |
+| `AB`    | `string` | Abbreviation (e.g., `poly`, `exp`, `inf`).              |
+| `SO`    | `int`              | Sort order for display.                                 |
+| `order` | `int`              | Logical ordering relative to other bounds.              |
+
+### Notes
+
+* Used in defining `time_bound`, `space_bound`, and `alternations_bound` for classes.
+
+### Example
+
+```json
+{
+  "NA": "Polynomial",
+  "AB": "poly",
+  "SO": 1,
+  "order": 1
+}
+```
+
+-------------
+
+## `Class` Table
 
 The `Class` model represents a complexity class defined by its problem type, machine, and resource bounds. Each class corresponds to a set of problems solvable by a particular kind of machine under specified resource constraints.
 
-## Fields
+### Fields
 
 | Field                | Type                        | Description                                                                                                           |
 | -------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -17,7 +56,7 @@ The `Class` model represents a complexity class defined by its problem type, mac
 | `space_bound`        | `ResourceBound id` | The space resource limit. Defaults to infinite if not specified.                                                      |
 | `alternations_bound` | `ResourceBound id` | Alternation bound (number of quantifier changes in alternating machines). Defaults to infinite if not specified.      |
 
-## Example
+### Example
 
 ```json
 {
@@ -32,7 +71,7 @@ The `Class` model represents a complexity class defined by its problem type, mac
 }
 ```
 
-## Notes
+### Notes
 
 The class table refers to several other tables like:
 * [ProblemType](problem_type.md)
@@ -44,32 +83,3 @@ It is also used to define other tables like:
 * [Manual NonMemebrship & NonMembership](non_memebership.md)
 * [Manual Inclusion & Inclusion](inclusion.md)
 * [Manual NonInclusion & NonInclusion](non_inclusion.md)
-
-# `ResourceBound` Table
-
-Defines the quantitative limits on computational resources used to define complexity classes.
-
-## Fields
-
-| Field   | Type                        | Description                                             |
-| ------- | --------------------------- | ------------------------------------------------------- |
-| `id`    | `int`                 | Auto-generated ID.                                      |
-| `NA`    | `string` | Full name of the bound (e.g., polynomial, exponential). |
-| `AB`    | `string` | Abbreviation (e.g., `poly`, `exp`, `inf`).              |
-| `SO`    | `int`              | Sort order for display.                                 |
-| `order` | `int`              | Logical ordering relative to other bounds.              |
-
-## Notes
-
-* Used in defining `time_bound`, `space_bound`, and `alternations_bound` for classes.
-
-## Example
-
-```json
-{
-  "NA": "Polynomial",
-  "AB": "poly",
-  "SO": 1,
-  "order": 1
-}
-```
