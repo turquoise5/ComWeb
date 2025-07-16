@@ -16,11 +16,11 @@
 
 ## Structure of this README
 
-- [Database](##-Database)
-- [Populating the Database](#-populating-the-database)
-- [Frontend](#️-frontend)
-- [Deployment](#-deployment)
-- [Future Directions](#-future-directions)
+- [Database](#database)
+- [Populating the Database](#populating-the-database)
+- [Frontend](#️frontend)
+- [Deployment](#deployment)
+- [Future Directions](#future-directions)
 
 ---
 
