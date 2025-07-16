@@ -25,17 +25,6 @@ The `ManualInclusion` table captures explicitly asserted inclusion facts between
 * [`Reference`](reference.md)
 * [`Inclusion`](inclusion.md)
 
-## Example
-
-```json
-{
-  "lower": "P",
-  "upper": "NP",
-  "justification": "By definition",
-  "references": ["Papadimitriou, Ch. 7"]
-}
-```
-
 # `Inclusion` Table
 
 The `Inclusion` table represents a derived or proven subset relationship between two complexity classes. For example, `P ⊆ NP`.
@@ -60,16 +49,5 @@ The `Inclusion` table represents a derived or proven subset relationship between
 
 * All inclusions in this table are either manually inserted or inferred logically.
 * If `interm` is provided, it shows that this inclusion is not direct but follows from chaining others.
-
-## Example
-
-```json
-{
-  "lower": "P",
-  "upper": "NP",
-  "method": "manual",
-  "interm": null
-}
-```
 
 
