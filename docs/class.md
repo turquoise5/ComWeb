@@ -72,9 +72,9 @@ The `Class` model represents a complexity class defined by its problem type, mac
 ### Notes
 
 The class table refers to several other tables like:
-* [ProblemType](problem_type.md)
-* [ResourceBound](machine.md)
-* [Machine](resource_bound.md)
+* [ProblemType](problem.md)
+* 'ResourceBound'
+* [Machine](machine_tables.md)
 
 It is also used to define other tables like: 
 * [Manual Membership & Membership](membership.md)
