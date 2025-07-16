@@ -16,7 +16,7 @@
 
 ## Structure of this README
 
-- [Database](#-database)
+- [Database](##-Database)
 - [Populating the Database](#-populating-the-database)
 - [Frontend](#️-frontend)
 - [Deployment](#-deployment)
