@@ -10,7 +10,7 @@
   - “Is problem X a member of class Y?”
 - Support for **manual and derived** inclusions, non-inclusions, and memberships.
 
-> If you're working in computational complexity, ComWeb helps you reason formally and collaboratively about known results, open problems, and supporting justifications.
+> If you're working in computational complexity, ComWeb helps you reason formally about known results, open problems, and supporting justifications.
 
 ---
 
