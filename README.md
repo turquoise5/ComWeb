@@ -36,16 +36,16 @@ Below is a list of core database tables used in ComWeb. Each links to a detailed
 | `MachineMode`                          | Represents modes of computation (e.g. deterministic, nondeterministic). Used to define machines. | [docs/machine\_tables.md](docs/machine_tables.md)     |
 | `MachineType`                          | Represents types of abstract machines (e.g. Turing Machine, DFA). Used to define machines.       | [docs/machine\_tables.md](docs/machine_tables.md)     |
 | `Machine`                              | A combination of `MachineType` and `MachineMode`. Used to define complexity classes.             | [docs/machine\_tables.md](docs/machine_tables.md)                |
-| `ProblemType`                          | High-level category for problems (e.g., language, promise problem). Used to define classes.      | [docs/problem.md](docs/problem.md)     |
+| `ProblemType`                          | High-level category for problems (e.g., language, search problem). Used to define classes.      | [docs/problem.md](docs/problem.md)     |
 | `ResourceBound`                        | Describes computational resource limits (e.g. polynomial time). Used to parameterize classes.    | [docs/class.md](docs/class.md) |
 | `Class`                                | Represents a complexity class defined by machine, problem type, and resource bounds.             | [docs/class.md](docs/class.md)                    |
-| `Method`                               | Describes how a fact (e.g., inclusion) was derived — manually, by transitivity, etc.             | [docs/method.md](docs/method.md)                  |
+| `Method`                               | Describes how a fact (e.g., inclusion) was derived i.e. manually, by transitivity, etc.             | [docs/method.md](docs/method.md)                  |
 | `MTG`, `ManualMTG`                     | Generalization relations between machine types. Used to derive machine inclusions.               | [docs/machine\_generalizations.md](docs/machine_generalizations.md)                        |
 | `MMG`, `ManualMMG`                     | Generalization relations between machine modes. Used to derive machine inclusions.               | [docs/machine\_generalizations.md](docs/machine\_generalizations.md)                        |
-| `Reference`                            | Bibliographic sources (e.g., papers, books) with locator fields. Cited in factual assertions.    | [docs/reference.md](docs/reference.md)            |
+| `Reference`                            | Bibliographic sources (e.g., papers, books) with locator fields. Used in manual entries.    | [docs/reference.md](docs/reference.md)            |
 | `Inclusion`, `ManualInclusion`         | Asserts that one complexity class is included in another, manually or via closure.               | [docs/inclusion.md](docs/inclusion.md)            |
-| `NonInclusion`, `ManualNonInclusion`   | Asserts a separation between two classes, with or without witness problems.                      | [docs/non\_inclusion.md](docs/non_inclusion.md)      |
-| `Problem`                              | Represents decision/computational problems. May have co-problems (e.g., SAT and UNSAT).          | [docs/problem.md](docs/problem.md)                |
+| `NonInclusion`, `ManualNonInclusion`   | Asserts a separation between two classes, through witness problems, chaining, or mnaual entry.                      | [docs/non\_inclusion.md](docs/non_inclusion.md)      |
+| `Problem`                              | Represents decision/computational problems.          | [docs/problem.md](docs/problem.md)                |
 | `Membership`, `ManualMembership`       | Asserts that a problem is in a class (derived or cited).                                         | [docs/membership.md](docs/membership.md)          |
 | `NonMembership`, `ManualNonMembership` | Asserts that a problem is *not* in a class.                                                      | [docs/non\_membership.md](docs/non_membership.md)    |
 
