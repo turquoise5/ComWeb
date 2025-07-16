@@ -26,6 +26,6 @@ The `Method` table stores metadata about how a given fact (e.g., an inclusion, m
 ## Related Tables
 
 * [`Inclusion`](inclusion.md)
-* [`NonInclusion`](noninclusion.md)
+* [`NonInclusion`](non_inclusion.md)
 * [`Membership`](membership.md)
 * [`NonMembership`](non_membership.md)
