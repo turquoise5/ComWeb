@@ -59,15 +59,17 @@ To better understand how each table is populated and interconnected, refer to th
 
 | Table                                     | Logic Description                                                      | Logic Docs                                                      |
 | ----------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------- |
-| `MachineMode` / `MachineType` / `Machine` | Populated from manual CSVs, required for class generation.             | [docs/logic\_machines.md](docs/logic_machines.md)               |
-| `ProblemType` / `ResourceBound`           | Loaded from static lists to define foundational schema.                | [docs/logic\_static.md](docs/logic_static.md)                   |
-| `Class`                                   | Created from cross-product of machine + problem type + bounds.         | [docs/logic\_class.md](docs/logic_class.md)                     |
-| `Reference` / `Method`                    | Parsed manually from citation CSVs.                                    | [docs/logic\_references.md](docs/logic_references.md)           |
-| `Inclusion` / `ManualInclusion`           | Populated manually and extended using transitive closure.              | [docs/logic\_inclusions.md](docs/logic_inclusions.md)           |
-| `NonInclusion` / `ManualNonInclusion`     | Loaded from manual assertions with logic for witness and transitivity. | [docs/logic\_noninclusions.md](docs/logic_noninclusions.md)     |
-| `Membership` / `ManualMembership`         | Derived via direct citation or transitive inclusion of problems.       | [docs/logic\_memberships.md](docs/logic_memberships.md)         |
-| `NonMembership` / `ManualNonMembership`   | Similar to Membership logic, but for exclusion.                        | [docs/logic\_nonmemberships.md](docs/logic_nonmemberships.md)   |
-| `MTG` / `MMG`                             | Constructed from Manual entries + inferred via closure.                | [docs/logic\_generalizations.md](docs/logic_generalizations.md) |
+| `MachineMode` / `MachineType` / `ProblemType`/ `ResourceBound` / `Method` / `Reference` | Populated from manual arrays.             | [data here](comweb/management/commands/data/static_data.py)               |
+| `Machine`        | Created from cross-product of `MachineType` + `MachineMode `                | [populator](comweb/management/commands/utils/machine_populator.py)                   | 
+| `Class`                                   | Populated from manual arrays, then adds a co-class for each class         | [data](comweb/management/commands/data/class_data.py) [populator](comweb/management/commands/utils/class_populator.py)                     |
+| `MTG` / `MMG`                             | Constructed from Manual entries + inferred via closure.                | [manual data](comweb/management/commands/data/mmg_mtg_data.py) [MMG populator](comweb/management/commands/utils/mmg_populator.py) [MTG populator](comweb/management/commands/utils/mtg_populator.py) |
+| `Inclusion` / `ManualInclusion` | `ManualInclusion` entries are added directly with justifications and references. `Inclusion` entries are generated automatically using based on generalizations of machine type, machine mode, and resource bound generalizations (i.e. P ⊆ NP as a result of machine mode generlization) + extended using transitive closure. | [manual data](comweb/management/commands/data/manual_inclusions_data.py), [populator](comweb/management/commands/utils/inclusion_populator.py) |
+| `NonInclusion` / `ManualNonInclusion` | `ManualNonInclusion` is entered with justifications and references. `NonInclusion` is expanded by: (1) importing manual assertions, (2) using witness problems—if problem X ∈ A and X ∉ B, infer A ⊄ B, (3) applying transitive rules such as: if A ⊄ B and C ⊆ B, then A ⊄ C; or if A ⊄ B and A ⊆ D, then D ⊄ B. | [data]() [populator](comweb/management/commands/utils/non_inclusions_populator.py) |
+| `Problem`                                   | Populated from manual arrays, then adds a co-problem for each problem         | [data](comweb/management/commands/data/problem_data.py) [populator](comweb/management/commands/utils/problem_populator.py)                     |
+| `Membership` / `ManualMembership` | `ManualMembership` is manually added with citations. `Membership` is expanded automatically: if a problem X is in class C′ and C′ ⊆ C (via `Inclusion`), then X ∈ C by transitivity. | [data](comweb/management/commands/data/memberships_data.py), [populator](comweb/management/commands/utils/memberships_populator.py) |
+| `NonMembership` / `ManualNonMembership` | `ManualNonMembership` is entered directly. `NonMembership` is inferred: if a problem X ∉ C′ and C ⊆ C′, then X ∉ C by transitivity. | [data](comweb/management/commands/data/memberships_data.py), [populator](comweb/management/commands/utils/memberships_populator.py) |
+
+
 
 
 ## Populating the Database
