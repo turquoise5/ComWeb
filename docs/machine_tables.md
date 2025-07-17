@@ -1,10 +1,10 @@
-# Tables for MACHINES
+# Tables for machines
 
 This document describes the schema and purpose of the tables related to machines.
 
 ---
 
-## `MachineType` Table
+## `MachineType` 
 
 Contains the various _types_ of machines (e.g., Turing machine, finite automaton).
 
@@ -19,7 +19,7 @@ Contains the various _types_ of machines (e.g., Turing machine, finite automaton
 
 ---
 
-## `MachineMode` Table
+## `MachineMode` 
 
 Contains the various _modes_ of machines (e.g., deterministic, nondeterministic).
 
@@ -34,7 +34,7 @@ Contains the various _modes_ of machines (e.g., deterministic, nondeterministic)
 
 ---
 
-## `Machine` Table
+## `Machine` 
 
 Contains the various _machines_ (e.g., deterministic Turing machine, nondeterministic finite automaton), each combining a _mode_ (e.g., deterministic, nondeterministic) and a _type_ (e.g., Turing machine, finite automaton).
 
