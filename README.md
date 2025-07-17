@@ -34,9 +34,9 @@ Below is a list of core database tables used in ComWeb. Each links to a detailed
 | Table                                  | Description                                                                                      | Docs                                              |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------- |
 | `MachineMode`
-| Contains the various _modes_ of computation (e.g. deterministic, nondeterministic). Used to define _machines_. 
-| [docs/machine\_tables.md](docs/machine_tables.md)     
-|
+ | Contains the various _modes_ of computation (e.g. deterministic, nondeterministic). Used to define _machines_. 
+ | [docs/machine\_tables.md](docs/machine_tables.md)     
+ |
 | `MachineType`                          
 | Contains the various _types_ of machines (e.g. Turing machine, finite automaton). Used to define machines.       
 | [docs/machine\_tables.md](docs/machine_tables.md)     
