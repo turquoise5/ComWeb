@@ -1,4 +1,4 @@
-# Machine-Related Tables
+# Tables related to MACHINES
 
 This document describes the schema and purpose of the tables related to machines.
 
