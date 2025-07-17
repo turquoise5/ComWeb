@@ -46,7 +46,6 @@ Below is a list of core database tables used in ComWeb. Each links to a detailed
 | `Reference`                            | Bibliographic sources (e.g., papers, books) with locator fields. Used in manual entries.    | [docs/reference.md](docs/reference.md)            |
 | `Inclusion`, `ManualInclusion`         | Asserts that one complexity class is included in another, manually or via closure.               | [docs/inclusion.md](docs/inclusion.md)            |
 | `NonInclusion`, `ManualNonInclusion`   | Asserts a separation between two classes, through witness problems, chaining, or mnaual entry.                      | [docs/non\_inclusion.md](docs/non_inclusion.md)      |
-
 | `Membership`, `ManualMembership`       | Asserts that a problem is in a class (derived or cited).                                         | [docs/membership.md](docs/membership.md)          |
 | `NonMembership`, `ManualNonMembership` | Asserts that a problem is *not* in a class.                                                      | [docs/non\_membership.md](docs/non_membership.md)    |
 
