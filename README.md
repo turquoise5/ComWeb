@@ -55,21 +55,19 @@ Below is a list of core database tables used in ComWeb. Each links to a detailed
 
 Each database table in ComWeb is populated according to specific logic—sometimes manually, sometimes computed via transitive closure, reference chains, or intermediate derivations.
 
-To better understand how each table is populated and interconnected, refer to the logic files in the [`docs/`](docs/) directory:
+To better understand how each table is populated, refer to the relevant manual data files and populator scripts:
 
-| Table                                     | Logic Description                                                      | Logic Docs                                                      |
+| Table                                     | Logic Description                                                      | Relevant Docs                                                      |
 | ----------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------- |
 | `MachineMode` / `MachineType` / `ProblemType`/ `ResourceBound` / `Method` / `Reference` | Populated from manual arrays.             | [data here](comweb/management/commands/data/static_data.py)               |
 | `Machine`        | Created from cross-product of `MachineType` + `MachineMode `                | [populator](comweb/management/commands/utils/machine_populator.py)                   | 
-| `Class`                                   | Populated from manual arrays, then adds a co-class for each class         | [data](comweb/management/commands/data/class_data.py) [populator](comweb/management/commands/utils/class_populator.py)                     |
-| `MTG` / `MMG`                             | Constructed from Manual entries + inferred via closure.                | [manual data](comweb/management/commands/data/mmg_mtg_data.py) [MMG populator](comweb/management/commands/utils/mmg_populator.py) [MTG populator](comweb/management/commands/utils/mtg_populator.py) |
+| `Class`                                   | Populated from manual arrays, then adds a co-class for each class         | [manual data], (comweb/management/commands/data/class_data.py) [populator](comweb/management/commands/utils/class_populator.py)                     |
+| `MTG` / `MMG`                             | Constructed from Manual entries + inferred via closure.                | [manual data](comweb/management/commands/data/mmg_mtg_data.py), [MMG populator](comweb/management/commands/utils/mmg_populator.py), [MTG populator](comweb/management/commands/utils/mtg_populator.py) |
 | `Inclusion` / `ManualInclusion` | `ManualInclusion` entries are added directly with justifications and references. `Inclusion` entries are generated automatically using based on generalizations of machine type, machine mode, and resource bound generalizations (i.e. P ⊆ NP as a result of machine mode generlization) + extended using transitive closure. | [manual data](comweb/management/commands/data/manual_inclusions_data.py), [populator](comweb/management/commands/utils/inclusion_populator.py) |
-| `NonInclusion` / `ManualNonInclusion` | `ManualNonInclusion` is entered with justifications and references. `NonInclusion` is expanded by: (1) importing manual assertions, (2) using witness problems—if problem X ∈ A and X ∉ B, infer A ⊄ B, (3) applying transitive rules such as: if A ⊄ B and C ⊆ B, then A ⊄ C; or if A ⊄ B and A ⊆ D, then D ⊄ B. | [data]() [populator](comweb/management/commands/utils/non_inclusions_populator.py) |
-| `Problem`                                   | Populated from manual arrays, then adds a co-problem for each problem         | [data](comweb/management/commands/data/problem_data.py) [populator](comweb/management/commands/utils/problem_populator.py)                     |
-| `Membership` / `ManualMembership` | `ManualMembership` is manually added with citations. `Membership` is expanded automatically: if a problem X is in class C′ and C′ ⊆ C (via `Inclusion`), then X ∈ C by transitivity. | [data](comweb/management/commands/data/memberships_data.py), [populator](comweb/management/commands/utils/memberships_populator.py) |
-| `NonMembership` / `ManualNonMembership` | `ManualNonMembership` is entered directly. `NonMembership` is inferred: if a problem X ∉ C′ and C ⊆ C′, then X ∉ C by transitivity. | [data](comweb/management/commands/data/memberships_data.py), [populator](comweb/management/commands/utils/memberships_populator.py) |
-
-
+| `NonInclusion` / `ManualNonInclusion` | `ManualNonInclusion` is entered with justifications and references. `NonInclusion` is expanded by: (1) importing manual assertions, (2) using witness problems—if problem X ∈ A and X ∉ B, infer A ⊄ B, (3) applying transitive rules such as: if A ⊄ B and C ⊆ B, then A ⊄ C; or if A ⊄ B and A ⊆ D, then D ⊄ B. | [data](), [populator](comweb/management/commands/utils/non_inclusions_populator.py) |
+| `Problem`                                   | Populated from manual arrays, then adds a co-problem for each problem         | [manual data](comweb/management/commands/data/problem_data.py), [populator](comweb/management/commands/utils/problem_populator.py)                     |
+| `Membership` / `ManualMembership` | `ManualMembership` is manually added with citations. `Membership` is expanded automatically: if a problem X is in class C′ and C′ ⊆ C (via `Inclusion`), then X ∈ C by transitivity. | [manual data](comweb/management/commands/data/memberships_data.py), [populator](comweb/management/commands/utils/memberships_populator.py) |
+| `NonMembership` / `ManualNonMembership` | `ManualNonMembership` is entered directly. `NonMembership` is inferred: if a problem X ∉ C′ and C ⊆ C′, then X ∉ C by transitivity. | [manual data](comweb/management/commands/data/memberships_data.py), [populator](comweb/management/commands/utils/memberships_populator.py) |
 
 
 ## Populating the Database
