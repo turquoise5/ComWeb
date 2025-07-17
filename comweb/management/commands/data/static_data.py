@@ -1,21 +1,21 @@
 # defines data to be inserted into the database
-modes_data = [
-            {"NA": "deterministic", "AB": "D", "SO": 0},
-            {"NA": "non-deterministic", "AB": "N", "SO": 1},
-            {"NA": "alternating", "AB": "A", "SO": 2},
-            {"NA": "lasvegas", "AB": "P0", "SO": 3}, 
-            {"NA": "montecarlo", "AB": "P1", "SO": 4},
-            {"NA": "bounded-error", "AB": "P2", "SO": 5},
-            {"NA": "probabilistic", "AB": "P", "SO": 6},
-            {"NA": "quantum", "AB": "Q", "SO": 7},
-            {"NA": "general", "AB": "*", "SO": 9},
+types_data = [
+            {"NA": "finite automaton",          "AB": "FA",   "SO": 0},
+            {"NA": "pushdown automaton",        "AB": "PDA",  "SO": 1},
+            {"NA": "linear bounded automaton",  "AB": "LBA",  "SO": 2},
+            {"NA": "Turing machine",            "AB": "TM",   "SO": 3}
         ]
 
-types_data = [
-            {"NA": "Turing machine", "AB": "TM", "SO": 2},
-            {"NA": "finite automaton", "AB": "FA", "SO": 0},
-            {"NA": "pushdown automaton", "AB": "PDA", "SO": 1},
-            {"NA": "linear bounded automaton", "AB": "LBA", "SO": 1}
+modes_data = [
+            {"NA": "deterministic",     "AB": "D",   "SO": 10},
+            {"NA": "nondeterministic",  "AB": "N",   "SO": 21},
+            {"NA": "alternating",       "AB": "A",   "SO": 22},
+            {"NA": "Las Vegas",         "AB": "P0",  "SO": 31}, 
+            {"NA": "Monte Carlo",       "AB": "P1",  "SO": 32},
+            {"NA": "bounded-error",     "AB": "P2",  "SO": 33},
+            {"NA": "probabilistic",     "AB": "P",   "SO": 34},
+            {"NA": "quantum",           "AB": "Q",   "SO": 41},
+            {"NA": "general",           "AB": "*",   "SO": 99},
         ]
 
 problem_type_data = [
