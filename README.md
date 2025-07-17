@@ -33,8 +33,8 @@ Below is a list of core database tables used in ComWeb. Each links to a detailed
 
 | Table                                  | Description                                                                                      | Docs                                              |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------- |
-| `MachineMode`                          
-| Contains the various _modes_ of computation (e.g. deterministic, nondeterministic). Used to define_ machines_. 
+| `MachineMode`
+| Contains the various _modes_ of computation (e.g. deterministic, nondeterministic). Used to define _machines_. 
 | [docs/machine\_tables.md](docs/machine_tables.md)     
 |
 | `MachineType`                          
