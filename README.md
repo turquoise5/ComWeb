@@ -147,3 +147,30 @@ ComWeb is under active development. Some potential improvements:
   - Import facts from standard texts (e.g., Papadimitriou's *Computational Complexity*).
 - **Improve the frontend**:
   - Enhanced filtering, visualizations, and citations.
+----
+## Contributions
+
+We welcome contributions to **ComWeb**! You;re welcome to contribute through flagging issues and mistakes, fixing bugs, improving documentation, or helping with inference logic, here's how to get started:
+
+### Ways to Contribute
+
+- **Fix or improve existing features** — Check [issues](https://github.com/turquoise5/issues)
+- **Add data** — Use the manual tables (e.g., `ManualInclusion`, `ManualMembership`) to input more manual facts, with citations.
+- **Write inference rules** — Help improve how we automatically deduce new facts (e.g., transitivity, witness logic).
+  
+### Getting Started
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b your-feature-name`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin your-feature-name`)
+5. Open a Pull Request
+
+### Guidelines
+
+- Follow existing code style and naming conventions.
+- Make sure any new inference logic has tests or examples.
+- Add documentation if your contribution affects core logic or tables.
+
+For questions or discussion, feel free to open an issue or start a discussion thread, or reach out to `jabdelma@andrew.cmu.edu` 
+
