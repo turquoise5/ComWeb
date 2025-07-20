@@ -48,51 +48,57 @@ bounds_data = [
 
 method_data = [
             {
-                "NA": "machine-mode generalization",
-                "AB": "MMG",
-                "SO": 0,
-                "DE": "Proving inclusion by generalizing the machine mode (e.g., deterministic to non-deterministic: DTM < NTM)."
-            },
-            {
-                "NA": "resource-bound generalization",
-                "AB": "RBG",
-                "SO": 1,
-                "DE": "Proving inclusion by relaxing the resource bound (e.g., polynomial to exponential time)."
-            },
-            {
-                "NA": "problem-type generalization",
-                "AB": "PTG",
-                "SO": 2,
-                "DE": "Proving inclusion by generalizing the problem type (e.g., decision to search)."
-            },
-            {
-                "NA": "machine-type generalization",
-                "AB": "MTG",
-                "SO": 3,
-                "DE": "Proving inclusion by generalizing the machine type (e.g., finite automaton to Turing machine)."
-            },
-            {
-                "NA": "transitivity", 
-                "AB": "trans",
-                "SO": 4,
-                "DE": "Proving inclusion by transitivity (e.g., if A ⊆ B and B ⊆ C, then A ⊆ C)."
-            },
-            {
-                "NA": "manual",
                 "AB": "manual",
-                "SO": 5,
-                "DE": "Inclusion added manually (a theorem; see references)."
+                "NA": "manual",
+                "DE": "This fact has been added manually.",
+                "SO": 0,
             },
             {
-                "NA": "Complementation Closure", 
-                "AB": "comp", 
-                "SO": 6, 
-                "DE": "co-C is in C hence C is in co-C"
+                "AB": "MTG",
+                "NA": "machine-type generalization",
+                "DE": "A ⊆ B because the *machine type* for class B generalizes the one for class A.",
+                "SO": 1,
+            },
+            {
+                "AB": "MMG",
+                "NA": "machine-mode generalization",
+                "DE": "A ⊆ B because the *machine mode* for class B generalizes the one for class A.",
+                "SO": 1,
+            },
+            {
+                "AB": "RBG",
+                "NA": "resource-bounds generalization",
+                "DE": "A ⊆ B because the *resource bounds* for class B generalize the ones for class A.",
+                "SO": 1,
+            },
+            {
+                "AB": "PTG",
+                "NA": "problem-type generalization",
+                "DE": "A ⊆ B because the *problem type* for class B generalizes the one for class A.",
+                "SO": 1,
+            },
+            {
+                "AB": "INCL-X",
+                "NA": "transitivity for inclusion", 
+                "DE": "A ⊆ B because A ⊆ C & C ⊆ B for some intermediate class C.",
+                "SO": 2,
+            },
+            {
+                "AB": "MEMB-X",
+                "NA": "transitivity for membership", 
+                "DE": "X ∈ A because X ∈ C & C ⊆ A for some intermediate class C.",
+                "SO": 2,
+            },
+            {
+                "AB": "INCL-CO", 
+                "NA": "complementation closure", 
+                "DE": "A ⊆ co-A because co-A ⊆ A",
+                "SO": 3, 
             }, 
             {
+                "AB": "WTNSS",
                 "NA": "witness",
-                "AB": "witness",
-                "SO": 7, 
-                "DE": "Witness problem non-inclusion"
+                "DE": "A ⊈ B because X ∈ A & X ∉ B for some problem X.",
+                "SO": 4, 
             }
         ]
