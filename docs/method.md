@@ -5,7 +5,7 @@ This document describes the schema and purpose of the tables related to reasonin
 
 ## `Method`
 
-Contains the various _methods_ (e.g., manual, transitivity) by which a given fact (e.g., inclusion, membership) is established.
+Contains the various _methods_ (e.g., manual, transitivity) by which a fact (e.g., inclusion, membership) may be deduced into the database.
 
 ### Fields
 
