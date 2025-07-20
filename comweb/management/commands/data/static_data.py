@@ -26,22 +26,24 @@ problem_type_data = [
         ]
 
 bounds_data = [
-            {"NA": "infinity", "AB": "inf", "SO": "15", "order": "15"}, 
-            {"NA": "finite", "AB": "finite", "SO": "14", "order": "14"}, 
-            {"NA": "recursive", "AB": "rec", "SO": "13", "order": "13"},
-            {"NA": "elementary", "AB": "elem", "SO": "12", "order": "12"},
-            {"NA": "doubly exponential", "AB": "2-exp", "SO": "11", "order": "11"},
-            {"NA": "exponential", "AB": "exp", "SO": "10", "order": "10"}, 
-            {"NA": "polynomial", "AB": "poly", "SO": "9", "order": "9"},
-            {"NA": "linear", "AB": "lin", "SO": "8", "order": "8"},            
-            {"NA": "poly logarithmic", "AB": "polylog", "SO": "7", "order": "7"}, 
-            {"NA": "logarthmic", "AB": "log", "SO": "6", "order": "6"},
-            {"NA": "log-logarthmic", "AB": "loglog", "SO": "5", "order": "5"},
-            {"NA": "constant", "AB": "const", "SO": "4", "order": "4"}, 
-            {"NA": "three", "AB": "3", "SO": "3", "order": "3"}, 
-            {"NA": "two", "AB": "2", "SO": "2", "order": "2"}, 
-            {"NA": "one", "AB": "1", "SO": "1", "order": "1"},
-            {"NA": "zero", "AB": "0", "SO": "0", "order": "0"} 
+            { "AB": "∞",       "NA": "unrestricted",       "SO": "99", "order": "99"}, 
+            { "AB": "fin",     "NA": "finite",             "SO": "42", "order": "42"}, 
+            { "AB": "rec",     "NA": "recursive",          "SO": "41", "order": "41"},
+            { "AB": "elem",    "NA": "elementary",         "SO": "40", "order": "40"},
+            { "AB": "2-exp",   "NA": "doubly-exponential", "SO": "31", "order": "31"},
+            { "AB": "exp",     "NA": "exponential",        "SO": "30", "order": "30"}, 
+            { "AB": "poly",    "NA": "polynomial",         "SO": "29", "order": "29"},
+            { "AB": "cub",     "NA": "cubic",              "SO": "22", "order": "22"},            
+            { "AB": "quad",    "NA": "quadratic",          "SO": "21", "order": "21"},            
+            { "AB": "lin",     "NA": "linear",             "SO": "20", "order": "20"},            
+            { "AB": "polylog", "NA": "polylogarithmic",    "SO": "12", "order": "12"}, 
+            { "AB": "log",     "NA": "logarthmic",         "SO": "11", "order": "11"},
+            { "AB": "loglog",  "NA": "log-logarthmic",     "SO": "10", "order": "10"},
+            { "AB": "const",   "NA": "constant",           "SO":  "9", "order":  "9"}, 
+            { "AB": "3",       "NA": "3",                  "SO":  "3", "order":  "3"}, 
+            { "AB": "2",       "NA": "2",                  "SO":  "2", "order":  "2"}, 
+            { "AB": "1",       "NA": "1",                  "SO":  "1", "order":  "1"},
+            { "AB": "0",       "NA":  "0",                 "SO":  "0", "order":  "0"} 
         ]
 
 method_data = [
