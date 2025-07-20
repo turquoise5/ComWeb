@@ -1,9 +1,9 @@
 # defines data to be inserted into the database
 types_data = [
-            { "AB": "FA",   "NA": "finite automaton",          "SO": 0 },
-            { "AB": "PDA",  "NA": "pushdown automaton",        "SO": 1 },
-            { "AB": "LBA",  "NA": "linear bounded automaton",  "SO": 2 },
-            { "AB": "TM",   "NA": "Turing machine",            "SO": 3 }
+            { 'AB': 'FA',   'NA': 'finite automaton',          'SO': 0 },
+            { 'AB': 'PDA',  'NA': 'pushdown automaton',        'SO': 1 },
+            { 'AB': 'LBA',  'NA': 'linear bounded automaton',  'SO': 2 },
+            { 'AB': 'TM',   'NA': 'Turing machine',            'SO': 3 }
         ]
 
 modes_data = [
@@ -19,10 +19,10 @@ modes_data = [
         ]
 
 problem_type_data = [
-            {'NA': 'decision problem', 'SO': 0, "order": 0},
-            {'NA': 'function problem', 'SO': 1, "order": 1},
-            {'NA': 'search problem', 'SO': 2, "order": 3},
-            {'NA': 'counting problem', 'SO': 3, "order": 2},
+            {"NA': 'decision', 'SO': 0, "order": 0},
+            {'NA': 'function', 'SO': 1, "order": 1},
+            {'NA': 'search', 'SO': 2, "order": 3},
+            {'NA': 'counting', 'SO': 3, "order": 2},
         ]
 
 bounds_data = [
