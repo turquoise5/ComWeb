@@ -22,8 +22,8 @@ Contains the various _types_ of problems (e.g., decision, search).
 ```json
 {
   "NA"    : "decision",
-  "SO"    : 1,
-  "order" : 1
+  "SO"    : 10,
+  "order" : 10
 }
 ```
 
@@ -46,16 +46,16 @@ Contains computational _problems_ (e.g., satisfiability, factoring). For every p
 | `NA`         | `string`         | Full name (e.g., `Satisfiability`).                                |
 | `DE`         | `string`         | A brief description of the problem.                                |
 | `TY`         | `ProblemType id` | The type of the problem (e.g., `decision`).                        |
-| `co`         | `boolean`        | Indicates whether this is the complement of the described problem. |
-| `co_problem` | `Problem id`     | Link to the complementary problem.                                 |
+| `co`         | `boolean`        | If `TY`=`decision`: Whether this is _the complement_ of `DE`.      |
+| `co_problem` | `Problem id`     | If `TY`=`decision`: Link to the complementary problem.             |
 
 ### Example
 
 ```json
 {
   "AB"         : "SAT",
-  "NA"         : "Satisfiability",
-  "DE"         : "Given a Boolean formula, check that there exists an assignment of truth values that makes it true.",
+  "NA"         : "satisfiability of Boolean formulas",
+  "DE"         : "Given a boolean formula φ, check that there exists an truth assignment that makes φ true.",
   "TY"         : "⟶ decision",
   "co"         : false,
   "co_problem" : "⟶ complement of SAT"
