@@ -1,5 +1,8 @@
 def get_class_data(problem_types, bounds, machines): 
     return ([
+            #################################################################
+            ########## COMPUTABILITY ########################################
+            #################################################################
             {
                 'NA': 'Deterministic Regular',
                 'AB': 'D-REGULAR',
@@ -42,6 +45,9 @@ def get_class_data(problem_types, bounds, machines):
                 'machine': machines['deterministic Turing machine'],
                 'time_bound': bounds['inf'],
             },
+            #################################################################
+            ########## COMPLEXITY ###########################################
+            #################################################################
             {
                 'NA': 'Deterministic Polynomial Time',
                 'AB': 'P',
