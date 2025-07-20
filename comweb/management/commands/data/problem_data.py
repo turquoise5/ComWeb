@@ -1,40 +1,40 @@
 def get_problem_data(problem_type_data): 
     problems = [
         {
-            "NA": "UNBOUNDED BINARY EQUALITY", 
-            "AB": "UNBOUNDED BINARY EQUALITY", 
-            "TY": problem_type_data["decision problem"], 
-            "DE": "Decide whether there's an equal number of 0s and 1s in a string of the form 0^n1^n", 
+            "AB": "ORDERED EQ_01", 
+            "NA": "ordered equality of 0s and 1s", 
+            "DE": "Given a binary string, check that it consists of some 0's followed by equally many 1's.", 
+            "TY": problem_type_data["decision"],          
         }, 
         {
-            "NA": "Halting problem for a Turing machine",
-            "AB": "HALTING",
-            "TY": problem_type_data["decision problem"],
-            "DE": "Given a Turing machine M and input w, decide whether M halts on w.",
+            "AB": "EQ_REX↑",
+            "NA": "equivalence of regular expressions with exponentiation",
+            "DE": "Given two regular expressions with exponentiation, check that they generate the same strings.",
+            "TY": problem_type_data["decision"],
         },
         {
-            "NA": "Satisfiability of a boolean formula",
-            "AB": "SAT",
-            "TY": problem_type_data["decision problem"],
-            "DE": "Given a boolean formula, decide whether there exists an assignment of variables that makes it true.",
-        },
-        {
-            "NA": "True Quantified Boolean Formula",
-            "AB": "TQBF",
-            "TY": problem_type_data["decision problem"],
-            "DE": "Decide whether a fully quantified boolean formula (with ∃ and ∀ quantifiers) is true.",
-        },
-        {
-            "NA": "Acceptance problem for Turing Machines",
             "AB": "A_TM",
-            "TY": problem_type_data["decision problem"],
-            "DE": "Given a Turing machine M and input w, decide whether M accepts w.",
+            "NA": "acceptance of Turing machines",
+            "DE": "Given a Turing machine M and an input w, check that M accepts w.",
+            "TY": problem_type_data["decision"],
         }, 
         {
-            "NA": "Equivalence of Regular Expressions",
-            "AB": "EQ-REG-EXP",
-            "TY": problem_type_data["decision problem"],
-            "DE": "Given two regular expressions, decide whether they define the same language.",
+            "AB": "HALT_ΤΜ",
+            "NA": "termination of Turing machines (the Halting Problem)",
+            "DE": "Given a Turing machine M and an input w, check that M halts on input w.",
+            "TY": problem_type_data["decision"],
+        },
+        {
+            "AB": "SAT",
+            "NA": "satisfiability of Boolean formulas",
+            "DE": "Given a boolean formula φ, check that there exists an assignment of truth values to the variables that makes φ true.",
+            "TY": problem_type_data["decision"],
+        },
+        {
+            "AB": "TQBF",
+            "NA": "true quantified Boolean formulas",
+            "DE": "Given a quantified Boolean formula φ, check that φ is true.",
+            "TY": problem_type_data["decision"],
         },
     ]
 
