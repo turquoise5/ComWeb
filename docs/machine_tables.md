@@ -10,12 +10,12 @@ Contains the various _types_ of machines (e.g., Turing machine, finite automaton
 
 ### Fields
 
-| Field | Type     | Description                                     |
-| ----- | -------- | ----------------------------------------------- |
-| `id`  | `int`    | Auto-generated unique identifier.               |
-| `AB`  | `string` | Abbreviation (e.g., `TM`).                      |
-| `NA`  | `string` | Full name of the type (e.g., `Turing machine`). |
-| `SO`  | `int`    | Sort order (used for UI ordering).              |
+| Field | Type     | Description                         |
+| ----- | -------- | ----------------------------------- |
+| `id`  | `int`    | Auto-generated unique identifier.   |
+| `AB`  | `string` | Abbreviation (e.g., `TM`).          |
+| `NA`  | `string` | Full name (e.g., `Turing machine`). |
+| `SO`  | `int`    | Sort order (used for UI ordering).  |
 
 ---
 
@@ -25,12 +25,12 @@ Contains the various _modes_ of machines (e.g., deterministic, nondeterministic)
 
 ### Fields
 
-| Field | Type     | Description                                    |
-| ----- | -------- | ---------------------------------------------- |
-| `id`  | `int`    | Auto-generated unique identifier.              |
-| `AB`  | `string` | Abbreviation (e.g., `D`).                      |
-| `NA`  | `string` | Full name of the mode (e.g., `deterministic`). |
-| `SO`  | `int`    | Sort order (used for UI ordering).             |
+| Field | Type     | Description                        |
+| ----- | -------- | ---------------------------------- |
+| `id`  | `int`    | Auto-generated unique identifier.  |
+| `AB`  | `string` | Abbreviation (e.g., `D`).          |
+| `NA`  | `string` | Full name (e.g., `deterministic`). |
+| `SO`  | `int`    | Sort order (used for UI ordering). |
 
 ---
 
@@ -40,14 +40,14 @@ Contains the various _machines_ (e.g., deterministic Turing machine, nondetermin
 
 ### Fields
 
-| Field  | Type             | Description                                                      |
-| ------ | ---------------- | ---------------------------------------------------------------- |
-| `id`   | `id`             | Auto-generated unique identifier.                                |
-| `AB`   | `string`         | Abbreviation of the machine (e.g., `DTM`).                       |
-| `NA`   | `string`         | Full name of the machine (e.g., `deterministic Turing machine`). |
-| `SO`   | `int`            | Sort order (used for UI ordering).                               |
-| `mode` | `MachineMode id` | The mode of the machine.                                         |
-| `type` | `MachineType id` | The type of the machine.                                         |
+| Field  | Type             | Description                                       |
+| ------ | ---------------- | ------------------------------------------------- |
+| `id`   | `id`             | Auto-generated unique identifier.                 |
+| `AB`   | `string`         | Abbreviation (e.g., `DTM`).                       |
+| `NA`   | `string`         | Full name (e.g., `deterministic Turing machine`). |
+| `SO`   | `int`            | Sort order (used for UI ordering).                |
+| `mode` | `MachineMode id` | The mode of the machine.                          |
+| `type` | `MachineType id` | The type of the machine.                          |
 
 ---
 
