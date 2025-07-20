@@ -1,8 +1,13 @@
-# `Method` Table
+# Tables for reasoning 
+This document describes the schema and purpose of the tables related to reasoning.
 
-The `Method` table stores metadata about how a given fact (e.g., an inclusion, membership, or non-membership) is established. This includes whether it is asserted manually, inferred through transitivity, or derived using some other technique.
+---
 
-## Fields
+## `Method`
+
+Contains the various _methods_ by which a given fact (e.g., inclusion, membership) is established.
+
+### Fields
 
 | Field | Type                        | Description                                                     |
 | ----- | --------------------------- | --------------------------------------------------------------- |
@@ -12,7 +17,7 @@ The `Method` table stores metadata about how a given fact (e.g., an inclusion, m
 | `SO`  | `int`              | Sort order used for display and query organization.             |
 | `DE`  | `string` | A brief textual description of the method.                      |
 
-## Example
+### Example
 
 ```json
 {
