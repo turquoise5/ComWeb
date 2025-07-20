@@ -33,7 +33,7 @@ def get_problem_data(problem_type_data):
         {
             "AB": "TQBF",
             "NA": "true quantified Boolean formulas",
-            "DE": "Given a quantified Boolean formula φ, check that φ is true.",
+            "DE": "Given a boolean formula φ, check that there exists an truth assignment that makes φ true.",
             "TY": problem_type_data["decision"],
         },
     ]
