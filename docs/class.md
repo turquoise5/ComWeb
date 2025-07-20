@@ -48,11 +48,11 @@ Contains the various computability and complexity _classes_ (e.g., P, NP). For e
 | `NA`                 | `string`           | Full name (e.g., `deterministic polynomial time`).                                   |
 | `problem_type`       | `ProblemType id`   | The type of the class problems (e.g., `decision`).                                   |
 | `machine`            | `Machine id`       | The machine solving the class problems (e.g., `deterministic Turing machine`).       |
-| `co`                 | `boolean`          | If `problem_type`=`decision`: Whether this is the class of _complementary_ problems. |
-| `co_class`           | `Class id`         | If `problem_type`=`decision`: Link to the class of complementary problems.           |
 | `time_bound`         | `ResourceBound id` | The bound for time, if any (e.g., `poly`). Defaults to `∞`.                          |
 | `space_bound`        | `ResourceBound id` | The bound for space, if any (e.g., `poly`). Defaults to `∞`.                         |
 | `alternations_bound` | `ResourceBound id` | The bound for the number of alternations. Defaults to `∞`.                           |
+| `co`                 | `boolean`          | If `problem_type`=`decision`: Whether this is the class of _complementary_ problems. |
+| `co_class`           | `Class id`         | If `problem_type`=`decision`: Link to the class of complementary problems.           |
 
 ### Example
 
@@ -62,11 +62,11 @@ Contains the various computability and complexity _classes_ (e.g., P, NP). For e
   "NA"                 : "deterministic polynomial time",
   "problem_type"       : "⟶ decision",
   "machine"            : "⟶ deterministic Turing machine",
-  "co"                 : false,
-  "co_class"           : "⟶ co-P"
   "time_bound"         : "⟶ polynomial",
   "space_bound"        : "⟶ ∞",
   "alternations_bound" : "⟶ ∞"
+  "co"                 : false,
+  "co_class"           : "⟶ co-P"
 }
 ```
 
