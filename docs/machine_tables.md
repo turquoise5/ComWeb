@@ -17,6 +17,20 @@ Contains the various _types_ of machines (e.g., Turing machine, finite automaton
 | `NA`  | `string` | Full name (e.g., `Turing machine`). |
 | `SO`  | `int`    | Sort order (used for UI ordering).  |
 
+### Example
+
+```json
+{
+  "AB"    : "TM",
+  "NA"    : "Turing machine",
+  "SO"    : 3,
+}
+```
+
+### Usage
+
+Used in `Machine`.
+
 ---
 
 ## `MachineMode` 
@@ -31,6 +45,20 @@ Contains the various _modes_ of machines (e.g., deterministic, nondeterministic)
 | `AB`  | `string` | Abbreviation (e.g., `D`).          |
 | `NA`  | `string` | Full name (e.g., `deterministic`). |
 | `SO`  | `int`    | Sort order (used for UI ordering). |
+
+### Example
+
+```json
+{
+  "AB"    : "D",
+  "NA"    : "deterministic",
+  "SO"    : 10,
+}
+```
+
+### Usage
+
+Used in `Machine`.
 
 ---
 
@@ -49,14 +77,26 @@ Contains the various _machines_ (e.g., deterministic Turing machine, nondetermin
 | `mode` | `MachineMode id` | The mode of the machine.                          |
 | `type` | `MachineType id` | The type of the machine.                          |
 
+### Example
+
+```json
+{
+  "AB"    : "DTM",
+  "NA"    : "deterministic Turing machine",
+  "SO"    : 310,
+  "mode"  : "⟶ deterministic",
+  "type"  : "⟶ Turing machine"
+}
+```
+
 ### Usage
 
 Used in [`Class`](class.md).
 
 ---
 
-## Related Tables
+## Related tables
 
-* [`Class`](class.md): references `Machine` to define complexity classes.
-* [`MTG` & `ManualMTG`](machine_generalizations.md): define generalization relationships between `MachineType` entries.
-* [`MMG` & `ManualMMG`](machine_generalizations.md): define generalization relationships between `MachineMode` entries.
+* [`Class`](class.md): Uses `Machine` to define complexity classes.
+* [`ManualMTG` & `MTG`](machine_generalizations.md): Defines generalization relationships between `MachineType`s.
+* [`ManualMMG` & `MMG`](machine_generalizations.md): Defines generalization relationships between `MachineMode`s.
