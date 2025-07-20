@@ -19,10 +19,10 @@ modes_data = [
         ]
 
 problem_type_data = [
-            {"NA": "decision", "SO": 0, "order": 0},
-            {"NA": "function", "SO": 1, "order": 1},
-            {"NA": "search", "SO": 2, "order": 3},
-            {"NA": "counting", "SO": 3, "order": 2},
+            { "NA": "decision", "SO": 10, "order": 10 },
+            { "NA": "function", "SO": 20, "order": 20 },
+            { "NA": "search",   "SO": 30, "order": 30 },
+            { "NA": "counting", "SO": 50, "order": 21 },
         ]
 
 bounds_data = [
