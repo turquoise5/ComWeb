@@ -49,6 +49,10 @@ Contains the various _machines_ (e.g., deterministic Turing machine, nondetermin
 | `mode` | `MachineMode id` | The mode of the machine.                          |
 | `type` | `MachineType id` | The type of the machine.                          |
 
+### Usage
+
+Used in [`Class`](class.md).
+
 ---
 
 ## Related Tables
