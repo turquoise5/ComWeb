@@ -39,7 +39,7 @@ Below is a list of core database tables used in ComWeb. Each links to a detailed
 | `ProblemType` | Contains the various _types_ of computational problems (e.g., decision, search). Used to define _problems_ and _classes_. | [docs/problem.md](docs/problem.md) |
 | `Problem` | Contains the various computational _problems_. | [docs/problem.md](docs/problem.md) |
 | `ResourceBound` | Contains the various _bounds_ (e.g., polynomial, exponential) for computational resources (e.g., time, space). Used to define _classes_. | [docs/class.md](docs/class.md) |
-| `Class` | Contains the various complexity _classes_. | [docs/class.md](docs/class.md) |
+| `Class` | Contains the various computability and complexity _classes_ of problems. | [docs/class.md](docs/class.md) |
 | `Method`                               | Describes how a fact (e.g., inclusion) was derived i.e. manually, by transitivity, etc.             | [docs/method.md](docs/method.md)                  |
 | `MTG`, `ManualMTG`                     | Generalization relations between machine types. Used to derive machine inclusions.               | [docs/machine\_generalizations.md](docs/machine_generalizations.md)                        |
 | `MMG`, `ManualMMG`                     | Generalization relations between machine modes. Used to derive machine inclusions.               | [docs/machine\_generalizations.md](docs/machine\_generalizations.md)                        |
