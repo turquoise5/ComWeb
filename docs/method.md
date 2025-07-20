@@ -14,8 +14,8 @@ Contains the various _methods_ (e.g., manual, transitivity) by which a fact (e.g
 | `id`  | `id`     | Auto-generated unique identifier.  |
 | `AB`  | `string` | Abbreviation (e.g., `manual`)      |
 | `NA`  | `string` | Full name (e.g., `manual`).        |
-| `SO`  | `int`    |Sort order (used for UI ordering).  |
 | `DE`  | `string` | A brief description of the method. |
+| `SO`  | `int`    |Sort order (used for UI ordering).  |
 
 ### Example
 
@@ -23,8 +23,8 @@ Contains the various _methods_ (e.g., manual, transitivity) by which a fact (e.g
 {
   "NA" : "manual",
   "AB" : "manual",
-  "SO" : 0,
   "DE" : "This fact has been added manually."
+  "SO" : 0,
 }
 ```
 ### Usage
