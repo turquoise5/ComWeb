@@ -4,178 +4,196 @@ def get_class_data(problem_types, bounds, machines):
             ########## COMPUTABILITY ########################################
             #################################################################
             {
-                "NA": "Deterministic Regular",
                 "AB": "D-REGULAR",
+                "NA": "Deterministic Regular",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["deterministic finite automaton"],
                 "time_bound": bounds["inf"],
             },
             {
-                "NA": "Non-deterministic Regular",
                 "AB": "N-REGULAR",
+                "NA": "Non-deterministic Regular",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["non-deterministic finite automaton"],
                 "time_bound": bounds["inf"],
             },
             {
-                "NA": "Deterministic Context-Free",
                 "AB": "D-CONTEXT-FREE",
+                "NA": "Deterministic Context-Free",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["deterministic pushdown automaton"],
                 "time_bound": bounds["inf"],
             },
             {
-                "NA": "Non-deterministic Context-Free",
                 "AB": "N-CONTEXT-FREE",
+                "NA": "Non-deterministic Context-Free",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["non-deterministic pushdown automaton"],
                 "time_bound": bounds["inf"],
             },
             {
-                "NA": "Decidable",
                 "AB": "DECIDABLE",
+                "NA": "Decidable",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["deterministic Turing machine"],
                 "time_bound": bounds["finite"],
             },
             {
-                "NA": "Recognizable",
                 "AB": "RECOGNIZABLE",
+                "NA": "Recognizable",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["deterministic Turing machine"],
                 "time_bound": bounds["inf"],
             },
             #################################################################
-            ########## COMPLEXITY ###########################################
-            #################################################################
+            ########## COMPLEXITY - time - deterministic ####################
+            ################################################################# 
             {
-                "NA": "Deterministic Polynomial Time",
                 "AB": "P",
+                "NA": "Deterministic Polynomial Time",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["deterministic Turing machine"],
                 "time_bound": bounds["poly"],
             },
             {
-                "NA": "Nondeterministic Polynomial Time",
+                "AB": "EXP",
+                "NA": "Deterministic Exponential Time",
+                "problem_type": problem_types["decision problem"],
+                "machine": machines["deterministic Turing machine"],
+                "time_bound": bounds["exp"],
+
+            },            
+            #################################################################
+            ########## COMPLEXITY - time - alternating ######################
+            ################################################################# 
+            {
                 "AB": "NP",
+                "NA": "Nondeterministic Polynomial Time",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["non-deterministic Turing machine"],
                 "time_bound": bounds["poly"],
             },
             {
-                "NA": "First Level Polynomial Hierarchy",
                 "AB": "Sigma_1^P",
+                "NA": "First Level Polynomial Hierarchy",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["alternating Turing machine"],
                 "time_bound": bounds["poly"],
                 "alternations_bound": bounds["1"]                
             },
             {
-                "NA": "Second Level Polynomial Hierarchy",
                 "AB": "Sigma_2^P",
+                "NA": "Second Level Polynomial Hierarchy",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["alternating Turing machine"],
                 "time_bound": bounds["poly"],
                 "alternations_bound": bounds["2"]
             },
             {
-                "NA": "Alternating Polynomial Time",
                 "AB": "AP",
+                "NA": "Alternating Polynomial Time",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["alternating Turing machine"],
                 "time_bound": bounds["poly"],
                 "alternations_bound": bounds["finite"]
             },
             {
-                "NA": "Deterministic Exponential Time",
-                "AB": "EXP",
-                "problem_type": problem_types["decision problem"],
-                "machine": machines["deterministic Turing machine"],
-                "time_bound": bounds["exp"],
-
-            },
-            {
-                "NA": "Nondeterministic Exponential Time",
                 "AB": "NEXP",
+                "NA": "Nondeterministic Exponential Time",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["non-deterministic Turing machine"],
                 "time_bound": bounds["exp"],
             },
+            #################################################################
+            ########## COMPLEXITY - time - probabilistic ####################
+            ################################################################# 
             {
-                "NA": "Deterministic Logarithmic Space",
-                "AB": "L",
-                "problem_type": problem_types["decision problem"],
-                "machine": machines["deterministic Turing machine"],
-                "space_bound": bounds["log"],
-            },
-            {
-                "NA": "Nondeterministic Logarithmic Space",
-                "AB": "NL",
-                "problem_type": problem_types["decision problem"],
-                "machine": machines["non-deterministic Turing machine"],
-                "space_bound": bounds["log"],
-            },
-            {
-                "NA": "Alternating Log Space",
-                "AB": "AL",
-                "problem_type": problem_types["decision problem"],
-                "machine": machines["alternating Turing machine"],
-                "space_bound": bounds["log"],
-            },
-            {
-                "NA": "Polynomial Space",
-                "AB": "PSPACE",
-                "problem_type": problem_types["decision problem"],
-                "machine": machines["deterministic Turing machine"],
-                "space_bound": bounds["poly"],
-            },
-            {
-                "NA": "Nondeterministic Polynomial Space",
-                "AB": "NPSPACE",
-                "problem_type": problem_types["decision problem"],
-                "machine": machines["non-deterministic Turing machine"],
-                "space_bound": bounds["poly"],
-            },
-            {
-                "NA": "Alternating Polynomial Space",
-                "AB": "APSPACE",
-                "problem_type": problem_types["decision problem"],
-                "machine": machines["alternating Turing machine"],
-                "space_bound": bounds["poly"],
-            },
-            {
-                "NA": "Deterministic Exponential Space",
-                "AB": "EXPSPACE",
-                "problem_type": problem_types["decision problem"],
-                "machine": machines["deterministic Turing machine"],
-                "space_bound": bounds["exp"],
-            },
-            {
-                "NA": "Nondeterministic Exponential Space",
-                "AB": "NEXPSPACE",
-                "problem_type": problem_types["decision problem"],
-                "machine": machines["non-deterministic Turing machine"],
-                "space_bound": bounds["exp"],
-            },
-            {
-                "NA": "Bounded-error Probabilistic Polynomial Time",
-                "AB": "BPP",
-                "problem_type": problem_types["decision problem"],
-                "machine": machines["probabilistic Turing machine"],
-                "time_bound": bounds["poly"],
-            },
-            {
-                "NA": "Randomized Polynomial Time",
                 "AB": "RP",
+                "NA": "Randomized Polynomial Time",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["probabilistic Turing machine"],
                 "time_bound": bounds["poly"],
             },
             {
-                "NA": "Quantum Polynomial Time",
+                "AB": "BPP",
+                "NA": "Bounded-error Probabilistic Polynomial Time",
+                "problem_type": problem_types["decision problem"],
+                "machine": machines["probabilistic Turing machine"],
+                "time_bound": bounds["poly"],
+            },
+            #################################################################
+            ########## COMPLEXITY - time - quantum ##########################
+            ################################################################# 
+            {
                 "AB": "BQP",
+                "NA": "Quantum Polynomial Time",
                 "problem_type": problem_types["decision problem"],
                 "machine": machines["quantum Turing machine"],
                 "time_bound": bounds["poly"],
             },
+            #################################################################
+            ########## COMPLEXITY - space - deterministic ###################
+            ################################################################# 
+            {
+                "AB": "L",
+                "NA": "Deterministic Logarithmic Space",
+                "problem_type": problem_types["decision problem"],
+                "machine": machines["deterministic Turing machine"],
+                "space_bound": bounds["log"],
+            },
+            {
+                "AB": "PSPACE",
+                "NA": "Polynomial Space",
+                "problem_type": problem_types["decision problem"],
+                "machine": machines["deterministic Turing machine"],
+                "space_bound": bounds["poly"],
+            },
+            {
+                "AB": "EXPSPACE",
+                "NA": "Deterministic Exponential Space",
+                "problem_type": problem_types["decision problem"],
+                "machine": machines["deterministic Turing machine"],
+                "space_bound": bounds["exp"],
+            },
+            #################################################################
+            ########## COMPLEXITY - space - alternating #####################
+            ################################################################# 
+            {
+                "AB": "NL",
+                "NA": "Nondeterministic Logarithmic Space",
+                "problem_type": problem_types["decision problem"],
+                "machine": machines["non-deterministic Turing machine"],
+                "space_bound": bounds["log"],
+            },
+            {
+                "AB": "AL",
+                "NA": "Alternating Log Space",
+                "problem_type": problem_types["decision problem"],
+                "machine": machines["alternating Turing machine"],
+                "space_bound": bounds["log"],
+            },
+            {
+                "AB": "NPSPACE",
+                "NA": "Nondeterministic Polynomial Space",
+                "problem_type": problem_types["decision problem"],
+                "machine": machines["non-deterministic Turing machine"],
+                "space_bound": bounds["poly"],
+            },
+            {
+                "AB": "APSPACE",
+                "NA": "Alternating Polynomial Space",
+                "problem_type": problem_types["decision problem"],
+                "machine": machines["alternating Turing machine"],
+                "space_bound": bounds["poly"],
+            },
+            {
+                "AB": "NEXPSPACE",
+                "NA": "Nondeterministic Exponential Space",
+                "problem_type": problem_types["decision problem"],
+                "machine": machines["non-deterministic Turing machine"],
+                "space_bound": bounds["exp"],
+            },
+            #################################################################
+            ########## COMPLEXITY - space - probabilistic ###################
+            ################################################################# 
         ])
